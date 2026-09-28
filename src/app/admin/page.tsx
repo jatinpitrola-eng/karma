@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { Shield, LayoutDashboard, Store, Package, ShoppingCart, Users, AlertTriangle, Check, Ban, ChevronLeft } from "lucide-react";
+import { Shield, LayoutDashboard, Store, Package, ShoppingCart, Users, AlertTriangle, Check, Ban, ChevronLeft, Banknote, Timer, Boxes, Warehouse } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { formatINR, formatDate, discountPct } from "@/lib/format";
 import { useSession } from "@/lib/store";
@@ -225,13 +225,13 @@ export default function AdminPage() {
             Array.from({ length: 7 }).map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)
           ) : (
             <>
-              <Stat label={t("admin.revenue")} value={new Intl.NumberFormat("en-IN").format(stats.revenue)} dark />
-              <Stat label={t("admin.orders")} value={String(stats.orders)} />
-              <Stat label={t("admin.customers")} value={String(stats.customers)} />
-              <Stat label={t("admin.products")} value={String(stats.products)} />
-              <Stat label={t("admin.retailersApproved")} value={String(stats.retailersApproved)} />
-              <Stat label={t("admin.retailersPending")} value={String(stats.retailersPending)} warn={stats.retailersPending > 0} />
-              <Stat label={t("admin.lowStock")} value={String(stats.lowStock)} warn={stats.lowStock > 0} />
+              <Stat label={t("admin.revenue")} value={new Intl.NumberFormat("en-IN").format(stats.revenue)} icon={Banknote} />
+              <Stat label={t("admin.orders")} value={String(stats.orders)} icon={ShoppingCart} />
+              <Stat label={t("admin.customers")} value={String(stats.customers)} icon={Users} />
+              <Stat label={t("admin.products")} value={String(stats.products)} icon={Boxes} />
+              <Stat label={t("admin.retailersApproved")} value={String(stats.retailersApproved)} icon={Store} />
+              <Stat label={t("admin.retailersPending")} value={String(stats.retailersPending)} icon={Timer} warn={stats.retailersPending > 0} />
+              <Stat label={t("admin.lowStock")} value={String(stats.lowStock)} icon={Warehouse} warn={stats.lowStock > 0} />
             </>
           )}
         </div>
@@ -254,7 +254,7 @@ export default function AdminPage() {
                     {r.ownerName} · +91 {r.phone} · {r.city} · {t("cat.allCategories")}: {r.categorySlugs.split(",").length}
                   </p>
                   <div className="mt-3 flex gap-2">
-                    <Button size="sm" className="h-9 gap-1 bg-green-600 font-bold hover:bg-green-700" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
+                    <Button size="sm" className="h-9 gap-1 bg-primary font-bold text-foreground hover:bg-(--primary-hover)" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
                       <Check className="h-4 w-4" /> {t("admin.approve")}
                     </Button>
                     <Button size="sm" variant="outline" className="h-9 gap-1 border-red-200 font-bold text-red-600 hover:bg-red-50" onClick={() => setRetailerStatus(r.id, "BLOCKED")}>
@@ -339,7 +339,7 @@ export default function AdminPage() {
                 </div>
                 <div className="mt-2.5 flex gap-2">
                   {r.status !== "APPROVED" && (
-                    <Button size="sm" variant="outline" className="h-8 gap-1 border-green-200 text-xs font-bold text-green-700 hover:bg-green-50" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
+                    <Button size="sm" className="h-8 gap-1 border-transparent bg-primary text-xs font-bold text-foreground hover:bg-(--primary-hover)" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
                       <Check className="h-3.5 w-3.5" /> {t("admin.approve")}
                     </Button>
                   )}
@@ -407,10 +407,17 @@ export default function AdminPage() {
   );
 }
 
-function Stat({ label, value, dark, warn }: { label: string; value: string; dark?: boolean; warn?: boolean }) {
+function Stat({ label, value, icon: Icon, warn }: { label: string; value: string; icon?: typeof Package; warn?: boolean }) {
   return (
-    <div className={cn("rounded-xl border p-3.5 shadow-soft", dark ? "border-stone-900 bg-stone-900 text-white" : "bg-card", warn && "border-red-200 bg-red-50")}>
-      <p className={cn("text-[11px] font-medium", dark ? "text-white/60" : "text-muted-foreground")}>{label}</p>
+    <div className={cn("rounded-xl border bg-white p-3.5 shadow-soft", warn && "border-red-200 bg-red-50/60")}>
+      <div className="flex items-center gap-2">
+        {Icon && (
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary/15 text-amber-600">
+            <Icon className="h-3.5 w-3.5" />
+          </span>
+        )}
+        <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
+      </div>
       <p className="mt-1 text-lg font-extrabold">{value}</p>
     </div>
   );

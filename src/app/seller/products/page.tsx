@@ -90,7 +90,7 @@ export default function SellerProductsPage() {
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
                     <Switch checked={p.active} onCheckedChange={(v) => toggleActive(p.id, v)} aria-label={t("common.enable")} />
-                    <Link href={`/seller/products/new?edit=${p.id}`} className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+                    <Link href={`/seller/products/new?edit=${p.id}`} className="flex items-center gap-1 text-xs font-semibold text-foreground hover:underline">
                       <Pencil className="h-3 w-3" /> {t("common.edit")}
                     </Link>
                   </div>

@@ -29,16 +29,16 @@ export function CountdownStrip() {
   }, []);
 
   return (
-    <div className="flex items-center justify-between rounded-t-xl border-b bg-gradient-to-r from-orange-600 to-red-500 px-4 py-2">
+    <div className="flex items-center justify-between rounded-t-xl border-b border-amber-200/70 bg-primary px-4 py-2">
       <div className="flex items-center gap-2">
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-white/20">
-          <Timer className="h-3.5 w-3.5 text-white" />
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-foreground/10">
+          <Timer className="h-3.5 w-3.5 text-foreground" />
         </span>
-        <span className="text-xs font-bold uppercase tracking-wide text-white">{t("home.dealsOfDay")}</span>
+        <span className="text-xs font-bold uppercase tracking-wide text-foreground">{t("home.dealsOfDay")}</span>
       </div>
-      <span className="flex items-center gap-1 text-xs font-semibold text-white">
+      <span className="flex items-center gap-1 text-xs font-semibold text-foreground">
         {t("home.endsIn")}
-        <span className="rounded bg-black/25 px-1.5 py-0.5 font-mono tabular-nums">
+        <span className="rounded bg-foreground px-1.5 py-0.5 font-mono tabular-nums text-primary">
           {pad(left.h)}:{pad(left.m)}:{pad(left.s)}
         </span>
       </span>

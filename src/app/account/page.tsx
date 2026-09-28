@@ -36,7 +36,7 @@ export default function AccountPage() {
       <div className="rounded-xl border bg-card p-4 shadow-soft">
         {me ? (
           <div className="flex items-center gap-3.5">
-            <span className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-orange-500 to-red-500 text-white">
+            <span className="grid h-14 w-14 place-items-center rounded-full bg-primary text-foreground">
               <User className="h-7 w-7" />
             </span>
             <div className="min-w-0 flex-1">
@@ -69,7 +69,7 @@ export default function AccountPage() {
       <div className="overflow-hidden rounded-xl border bg-card shadow-soft">
         <div className="divide-y">
           <Link href="/orders" className="flex items-center gap-3.5 px-4 py-3.5 hover:bg-muted/60">
-            <Package className="h-5 w-5 text-primary" />
+            <Package className="h-5 w-5 text-amber-600" />
             <span className="flex-1 text-sm font-medium">{t("account.myOrders")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
@@ -82,7 +82,7 @@ export default function AccountPage() {
           {/* Seller entry */}
           {me?.retailer ? (
             <Link href="/seller" className="flex items-center gap-3.5 px-4 py-3.5 hover:bg-muted/60">
-              <Store className="h-5 w-5 text-primary" />
+              <Store className="h-5 w-5 text-amber-600" />
               <span className="flex-1 text-sm font-medium">{t("account.sellerHub")}</span>
               {retailerApproved && <BadgeCheck className="h-4 w-4 text-green-600" />}
               {retailerPending && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">PENDING</span>}
@@ -90,7 +90,7 @@ export default function AccountPage() {
             </Link>
           ) : (
             <Link href="/seller/signup" className="flex items-center gap-3.5 px-4 py-3.5 hover:bg-muted/60">
-              <Store className="h-5 w-5 text-primary" />
+              <Store className="h-5 w-5 text-amber-600" />
               <span className="flex-1 text-sm font-medium">{t("account.becomeSeller")}</span>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </Link>
@@ -111,9 +111,9 @@ export default function AccountPage() {
           {/* language */}
           <div className="relative">
             <button onClick={() => setLangOpen((v) => !v)} className="flex w-full items-center gap-3.5 px-4 py-3.5 text-left hover:bg-muted/60">
-              <Languages className="h-5 w-5 text-primary" />
+              <Languages className="h-5 w-5 text-amber-600" />
               <span className="flex-1 text-sm font-medium">{t("account.language")}</span>
-              <span className="text-xs font-bold text-primary">{LANGS.find((l) => l.code === lang)?.native}</span>
+              <span className="text-xs font-bold text-foreground">{LANGS.find((l) => l.code === lang)?.native}</span>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </button>
             {langOpen && (
@@ -147,18 +147,18 @@ export default function AccountPage() {
             }}
             className="flex w-full items-center gap-3.5 px-4 py-3.5 text-left hover:bg-muted/60"
           >
-            <Download className="h-5 w-5 text-primary" />
+            <Download className="h-5 w-5 text-amber-600" />
             <span className="flex-1 text-sm font-medium">{t("account.installApp")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
 
           <Link href="/account" className="flex items-center gap-3.5 px-4 py-3.5 hover:bg-muted/60">
-            <HelpCircle className="h-5 w-5 text-primary" />
+            <HelpCircle className="h-5 w-5 text-amber-600" />
             <span className="flex-1 text-sm font-medium">{t("account.help")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
           <Link href="/account" className="flex items-center gap-3.5 px-4 py-3.5 hover:bg-muted/60">
-            <Info className="h-5 w-5 text-primary" />
+            <Info className="h-5 w-5 text-amber-600" />
             <span className="flex-1 text-sm font-medium">{t("account.about")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>

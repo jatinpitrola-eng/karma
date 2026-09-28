@@ -90,7 +90,7 @@ export default function HomePage() {
       <section aria-label="Trending parts">
         <div className="mb-2.5 flex items-center justify-between px-1">
           <h2 className="text-base font-bold">{t("home.trending")}</h2>
-          <Link href="/categories" className="flex items-center text-xs font-semibold text-primary hover:underline">
+          <Link href="/categories" className="flex items-center text-xs font-semibold text-foreground hover:underline">
             {t("common.viewAll")} <ChevronRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -115,7 +115,7 @@ export default function HomePage() {
                   href={`/category/all?retailer=${r.id}`}
                   className="flex w-56 shrink-0 items-center gap-3 rounded-xl border bg-card p-3.5 shadow-soft transition-shadow hover:shadow-pop"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-orange-400 to-red-500 text-white">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/15 text-amber-600">
                     <Store className="h-5 w-5" />
                   </span>
                   <span className="min-w-0">

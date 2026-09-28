@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Package, ShoppingCart, Banknote, Timer } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { SellerGate, SellerNav, StatCard, useSellerStats } from "./seller-ui";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,7 +13,7 @@ export default function SellerDashboardPage() {
     <SellerGate>
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-soft">
+          <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/15 shadow-soft">
             <span className="text-lg">🏪</span>
           </span>
           <div>
@@ -28,10 +29,10 @@ export default function SellerDashboardPage() {
             Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)
           ) : (
             <>
-              <StatCard label={t("seller.totalProducts")} value={String(stats.totalProducts)} />
-              <StatCard label={t("seller.totalOrders")} value={String(stats.totalOrders)} />
-              <StatCard label={t("seller.revenue")} value={new Intl.NumberFormat("en-IN").format(stats.revenue)} accent />
-              <StatCard label={t("seller.pendingOrders")} value={String(stats.pendingOrders)} />
+              <StatCard label={t("seller.totalProducts")} value={String(stats.totalProducts)} icon={Package} />
+              <StatCard label={t("seller.totalOrders")} value={String(stats.totalOrders)} icon={ShoppingCart} />
+              <StatCard label={t("seller.revenue")} value={new Intl.NumberFormat("en-IN").format(stats.revenue)} icon={Banknote} />
+              <StatCard label={t("seller.pendingOrders")} value={String(stats.pendingOrders)} icon={Timer} warn={stats.pendingOrders > 0} />
             </>
           )}
         </div>

@@ -1,4 +1,4 @@
-// Generates real PNG icons for PartKart PWA (192, 512, maskable variants)
+// Generates real PNG icons for PartKart PWA (192, 512, maskable variants) — White + Yellow theme (#FFC107)
 const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
@@ -10,14 +10,14 @@ const svg = (maskable) => {
   return `<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#F97316"/>
-      <stop offset="55%" stop-color="#EA580C"/>
-      <stop offset="100%" stop-color="#C2410C"/>
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="55%" stop-color="#FFC107"/>
+      <stop offset="100%" stop-color="#FFB300"/>
     </linearGradient>
   </defs>
   <rect x="0" y="0" width="512" height="512" rx="${maskable ? 0 : 112}" fill="url(#bg)"/>
   <g transform="translate(256 224)">
-    <g fill="#ffffff" opacity="0.95">
+    <g fill="#1A1A1A" opacity="0.95">
       ${Array.from({ length: 12 })
         .map((_, i) => {
           const a = (i * 30 * Math.PI) / 180;
@@ -27,10 +27,10 @@ const svg = (maskable) => {
         })
         .join("\n      ")}
     </g>
-    <circle r="126" fill="none" stroke="#ffffff" stroke-width="32" opacity="0.95"/>
-    <path d="M -17 -70 L 17 -70 L 17 -17 L 32 8 L 32 74 L 11 74 L 11 28 L -11 28 L -11 74 L -32 74 L -32 8 L -17 -17 Z" fill="#EA580C"/>
+    <circle r="126" fill="none" stroke="#1A1A1A" stroke-width="32" opacity="0.95"/>
+    <path d="M -17 -70 L 17 -70 L 17 -17 L 32 8 L 32 74 L 11 74 L 11 28 L -11 28 L -11 74 L -32 74 L -32 8 L -17 -17 Z" fill="#FFFFFF"/>
   </g>
-  <text x="256" y="440" font-family="Arial, Helvetica, sans-serif" font-size="84" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="2">PartKart</text>
+  <text x="256" y="440" font-family="Arial, Helvetica, sans-serif" font-size="84" font-weight="800" fill="#1A1A1A" text-anchor="middle" letter-spacing="2">PartKart</text>
 </svg>`;
 };
 

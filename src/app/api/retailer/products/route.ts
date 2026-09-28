@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
   const key = `r-${retailer.phone}-${String(partNumber).toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   const slug = `${String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 48)}-${Date.now().toString(36)}`;
   const images = JSON.stringify([
-    { g: "from-orange-100 to-amber-200", e: "🔧" },
-    { g: "from-amber-100 to-orange-200", e: "⚙️" },
+    { g: "from-yellow-50 to-amber-100", e: "🔧" },
+    { g: "from-amber-50 to-yellow-100", e: "⚙️" },
     { g: "from-yellow-100 to-amber-200", e: "🔩" },
   ]);
 

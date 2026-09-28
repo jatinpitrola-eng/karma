@@ -34,7 +34,7 @@ export function parseImages(images: string): ProductImage[] {
     const arr = JSON.parse(images);
     if (Array.isArray(arr) && arr.length) return arr as ProductImage[];
   } catch {}
-  return [{ g: "from-orange-100 to-amber-200", e: "🔧" }];
+  return [{ g: "from-yellow-50 to-amber-100", e: "🔧" }];
 }
 
 export const ORDER_FLOW = ["PLACED", "CONFIRMED", "PACKED", "SHIPPED", "DELIVERED"] as const;

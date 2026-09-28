@@ -4,7 +4,7 @@
  * - Cache-first for static assets (icons, images, fonts)
  * - NEVER cache /api/*
  */
-const VERSION = 'partkart-v2';
+const VERSION = 'partkart-v3';
 const SHELL_CACHE = `${VERSION}-shell`;
 const STATIC_CACHE = `${VERSION}-static`;
 const OFFLINE_URL = '/offline';

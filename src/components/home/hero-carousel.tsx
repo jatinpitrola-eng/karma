@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
 
 const SLIDES = [
-  { key: "hero1", from: "from-orange-500", to: "to-red-600", emoji: "⛓️" },
-  { key: "hero2", from: "from-amber-500", to: "to-orange-600", emoji: "🛢️" },
-  { key: "hero3", from: "from-red-500", to: "to-rose-600", emoji: "🛑" },
-  { key: "hero4", from: "from-orange-600", to: "to-amber-600", emoji: "⚙️" },
+  { key: "hero1", from: "from-amber-400", to: "to-yellow-300", emoji: "⛓️" },
+  { key: "hero2", from: "from-yellow-300", to: "to-amber-300", emoji: "🛢️" },
+  { key: "hero3", from: "from-amber-300", to: "to-yellow-200", emoji: "🛑" },
+  { key: "hero4", from: "from-amber-400", to: "to-yellow-200", emoji: "⚙️" },
 ];
 
 export function HeroCarousel() {
@@ -25,12 +25,12 @@ export function HeroCarousel() {
     <div className={`relative overflow-hidden rounded-xl bg-gradient-to-r ${s.from} ${s.to} shadow-soft`}>
       <div className="flex min-h-[132px] items-center justify-between px-5 py-5">
         <div key={s.key} className="slide-up-in">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-white/80">PartKart</p>
-          <h2 className="mt-0.5 text-xl font-extrabold text-white sm:text-2xl">{t(`home.${s.key}.title`)}</h2>
-          <p className="mt-1 text-sm text-white/90">{t(`home.${s.key}.sub`)}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-foreground/60">PartKart</p>
+          <h2 className="mt-0.5 text-xl font-extrabold text-foreground sm:text-2xl">{t(`home.${s.key}.title`)}</h2>
+          <p className="mt-1 text-sm text-foreground/80">{t(`home.${s.key}.sub`)}</p>
           <Link
             href="/deals"
-            className="mt-2.5 inline-block rounded-full bg-white px-4 py-1.5 text-xs font-bold text-orange-600 shadow-sm active:scale-95"
+            className="mt-2.5 inline-block rounded-full bg-foreground px-4 py-1.5 text-xs font-bold text-primary shadow-sm active:scale-95"
           >
             {t(`home.${s.key}.cta`)} →
           </Link>
@@ -45,7 +45,7 @@ export function HeroCarousel() {
             key={i}
             onClick={() => setIdx(i)}
             aria-label={`Slide ${i + 1}`}
-            className={`h-1.5 rounded-full transition-all ${i === idx ? "w-5 bg-white" : "w-1.5 bg-white/50"}`}
+            className={`h-1.5 rounded-full transition-all ${i === idx ? "w-5 bg-foreground" : "w-1.5 bg-foreground/25"}`}
           />
         ))}
       </div>

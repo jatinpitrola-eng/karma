@@ -172,7 +172,7 @@ export default function CartPage() {
           {/* coupon */}
           <div className="rounded-xl border bg-card p-3.5 shadow-soft">
             <div className="flex items-center gap-2">
-              <Tag className="h-4 w-4 text-primary" />
+              <Tag className="h-4 w-4 text-amber-600" />
               <p className="flex-1 text-sm font-semibold">{t("cart.couponPlaceholder")}</p>
             </div>
             <div className="mt-2.5 flex gap-2">
@@ -182,7 +182,7 @@ export default function CartPage() {
                 placeholder="DEMO10"
                 className="h-10 flex-1 font-mono uppercase"
               />
-              <Button variant="outline" className="h-10 font-bold text-primary" onClick={applyCoupon}>
+              <Button variant="outline" className="h-10 border-border bg-white font-bold text-foreground hover:bg-muted" onClick={applyCoupon}>
                 {t("cart.couponApply")}
               </Button>
             </div>

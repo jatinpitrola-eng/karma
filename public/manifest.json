@@ -7,8 +7,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FFF7ED",
-  "theme_color": "#EA580C",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFC107",
   "lang": "en",
   "categories": ["shopping", "automotive"],
   "icons": [

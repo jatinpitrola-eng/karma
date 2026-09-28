@@ -70,8 +70,8 @@ function LoginInner() {
     <div className="mx-auto max-w-sm">
       <div className="rounded-2xl border bg-card p-6 shadow-soft">
         <div className="text-center">
-          <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 shadow-pop">
-            <Wrench className="h-8 w-8 text-white" />
+          <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-primary shadow-pop">
+            <Wrench className="h-8 w-8 text-foreground" />
           </span>
           <h1 className="mt-3 text-lg font-extrabold">{t("auth.welcome")}</h1>
           <p className="text-xs text-muted-foreground">{t("auth.sub")}</p>

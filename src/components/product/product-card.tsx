@@ -24,7 +24,7 @@ export function ProductCard({ p }: { p: ProductCardData }) {
       href={`/product/${p.slug}`}
       className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-soft transition-shadow hover:shadow-pop"
     >
-      <div className={`relative grid aspect-square place-items-center bg-gradient-to-br ${img.g ?? "from-orange-100 to-amber-200"}`}>
+      <div className={`relative grid aspect-square place-items-center bg-gradient-to-br ${img.g ?? "from-yellow-50 to-amber-100"}`}>
         <span className="text-5xl drop-shadow-sm transition-transform group-hover:scale-110" aria-hidden>
           {img.e ?? "🔧"}
         </span>
@@ -51,7 +51,7 @@ export function ProductCard({ p }: { p: ProductCardData }) {
           <span className="text-sm font-bold">{formatINR(p.price)}</span>
           {off > 0 && <span className="text-[11px] text-muted-foreground line-through">{formatINR(p.mrp)}</span>}
         </div>
-        <p className="text-[10.5px] font-medium text-green-700">{t("product.deliveryIn")}</p>
+        <p className="text-[10.5px] font-medium text-muted-foreground">{t("product.deliveryIn")}</p>
       </div>
     </Link>
   );

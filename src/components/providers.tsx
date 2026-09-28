@@ -43,7 +43,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <NotificationEngine>
           <OfflineWatcher>{children}</OfflineWatcher>
         </NotificationEngine>
-        <Toaster position="top-center" richColors closeButton />
+        <Toaster position="top-center" closeButton />
       </SessionBootstrap>
     </I18nProvider>
   );

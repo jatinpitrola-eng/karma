@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, ShoppingCart, Plus, Store, Clock } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Plus, Store, Clock, Banknote, Timer } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useSession } from "@/lib/store";
 import { formatINR } from "@/lib/format";
@@ -46,7 +46,7 @@ export function SellerGate({ children }: { children: React.ReactNode }) {
         <div className="mt-4 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-secondary-foreground">
           {me.retailer.businessName} · PENDING
         </div>
-        <Link href="/" className="mt-5 inline-block text-sm font-semibold text-primary hover:underline">
+        <Link href="/" className="mt-5 inline-block text-sm font-semibold text-foreground hover:underline">
           {t("cart.startShopping")} →
         </Link>
       </div>
@@ -85,7 +85,7 @@ export function SellerNav() {
       })}
       <Link
         href="/seller/products/new"
-        className="flex shrink-0 items-center gap-1.5 rounded-full bg-green-600 px-4 py-2 text-xs font-bold text-white hover:bg-green-700"
+        className="flex shrink-0 items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-bold text-primary hover:bg-foreground/90"
       >
         <Plus className="h-3.5 w-3.5" />
         {t("seller.addProduct")}
@@ -94,10 +94,27 @@ export function SellerNav() {
   );
 }
 
-export function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+export function StatCard({
+  label,
+  value,
+  icon: Icon,
+  warn,
+}: {
+  label: string;
+  value: string;
+  icon?: typeof Package;
+  warn?: boolean;
+}) {
   return (
-    <div className={cn("rounded-xl border p-3.5 shadow-soft", accent ? "bg-gradient-to-br from-orange-500 to-red-500 text-white" : "bg-card")}>
-      <p className={cn("text-[11px] font-medium", accent ? "text-white/80" : "text-muted-foreground")}>{label}</p>
+    <div className={cn("rounded-xl border bg-white p-3.5 shadow-soft", warn && "border-red-200 bg-red-50/60")}>
+      <div className="flex items-center gap-2">
+        {Icon && (
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary/15 text-amber-600">
+            <Icon className="h-3.5 w-3.5" />
+          </span>
+        )}
+        <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
+      </div>
       <p className="mt-1 truncate text-lg font-extrabold">{value}</p>
     </div>
   );

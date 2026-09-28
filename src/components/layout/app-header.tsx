@@ -58,22 +58,22 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-gradient-to-r from-orange-600 via-orange-500 to-red-500 shadow-soft">
+    <header className="sticky top-0 z-40 border-b bg-white">
       <div className="mx-auto w-full max-w-5xl px-3 pt-2.5 pb-2">
         <div className="flex items-center gap-2.5">
           <Link href="/" className="flex shrink-0 items-center gap-1.5" aria-label="PartKart Home">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/20 backdrop-blur">
-              <Wrench className="h-5 w-5 text-white" />
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary shadow-sm">
+              <Wrench className="h-5 w-5 text-foreground" />
             </span>
-            <span className="hidden text-lg font-extrabold tracking-tight text-white sm:block">
-              Part<span className="text-yellow-300">Kart</span>
+            <span className="hidden text-lg font-extrabold tracking-tight text-foreground sm:block">
+              Part<span className="text-[#F59E0B]">Kart</span>
             </span>
           </Link>
 
           {/* Search with live suggestions */}
           <div ref={boxRef} className="relative min-w-0 flex-1">
             <form onSubmit={submitSearch}>
-              <div className="flex items-center rounded-xl bg-white px-3 py-2 shadow-sm">
+              <div className="flex items-center rounded-full border border-input bg-white px-3 py-2 shadow-sm transition-shadow focus-within:border-primary/70 focus-within:ring-2 focus-within:ring-primary/30">
                 <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
                 <input
                   value={q}
@@ -103,7 +103,7 @@ export function AppHeader() {
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium">{s.name}</span>
                     </span>
-                    <span className="shrink-0 text-sm font-bold text-primary">{formatINR(s.price)}</span>
+                    <span className="shrink-0 text-sm font-bold text-foreground">{formatINR(s.price)}</span>
                   </button>
                 ))}
               </div>
@@ -114,7 +114,7 @@ export function AppHeader() {
           <div className="relative shrink-0">
             <button
               onClick={() => setLangOpen((v) => !v)}
-              className="flex h-9 items-center gap-1 rounded-full bg-white/15 px-2.5 text-xs font-semibold text-white hover:bg-white/25"
+              className="flex h-9 items-center gap-1 rounded-full border border-border bg-white px-2.5 text-xs font-semibold text-foreground hover:bg-muted"
               aria-label={t("account.selectLanguage")}
             >
               <Globe className="h-4 w-4" />
@@ -132,7 +132,7 @@ export function AppHeader() {
                         setLang(l.code);
                         setLangOpen(false);
                       }}
-                      className={`flex w-full items-center justify-between px-4 py-2.5 text-sm hover:bg-muted ${lang === l.code ? "font-bold text-primary" : ""}`}
+                      className={`flex w-full items-center justify-between px-4 py-2.5 text-sm hover:bg-muted ${lang === l.code ? "font-bold text-foreground" : ""}`}
                     >
                       {l.native}
                       {lang === l.code && <span className="h-2 w-2 rounded-full bg-primary" />}

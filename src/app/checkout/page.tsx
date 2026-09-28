@@ -64,7 +64,7 @@ function UpiFlow({
 
         {step === "processing" && (
           <div className="grid place-items-center py-10 text-center">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <Loader2 className="h-10 w-10 animate-spin text-amber-600" />
             <p className="mt-4 text-sm font-medium">{t("checkout.upiProcessing")}</p>
             <p className="mt-1 text-[11px] text-muted-foreground">{t("checkout.demoUpi")}</p>
           </div>
@@ -217,10 +217,10 @@ function CheckoutInner() {
       {/* address */}
       <section className="rounded-xl border bg-card p-4 shadow-soft">
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-primary" />
+          <MapPin className="h-4 w-4 text-amber-600" />
           <h2 className="flex-1 text-sm font-bold">{t("checkout.deliveryAddress")}</h2>
           {!showForm && (
-            <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-semibold text-primary" onClick={() => setShowForm(true)}>
+            <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-semibold text-foreground" onClick={() => setShowForm(true)}>
               <Plus className="h-3.5 w-3.5" /> {t("checkout.addNew")}
             </Button>
           )}
@@ -276,7 +276,7 @@ function CheckoutInner() {
         <RadioGroup value={payment} onValueChange={(v) => setPayment(v as "COD" | "UPI")} className="mt-3 gap-2.5">
           <label className={cn("flex cursor-pointer items-center gap-3 rounded-lg border p-3.5 transition-colors", payment === "COD" ? "border-primary bg-secondary" : "hover:bg-muted/50")}>
             <RadioGroupItem value="COD" />
-            <Banknote className="h-5 w-5 text-primary" />
+            <Banknote className="h-5 w-5 text-amber-600" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold">{t("checkout.cod")}</span>
               <span className="block text-xs text-muted-foreground">{t("checkout.codDesc")}</span>
@@ -284,7 +284,7 @@ function CheckoutInner() {
           </label>
           <label className={cn("flex cursor-pointer items-center gap-3 rounded-lg border p-3.5 transition-colors", payment === "UPI" ? "border-primary bg-secondary" : "hover:bg-muted/50")}>
             <RadioGroupItem value="UPI" />
-            <Smartphone className="h-5 w-5 text-primary" />
+            <Smartphone className="h-5 w-5 text-amber-600" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold">{t("checkout.upi")}</span>
               <span className="block text-xs text-muted-foreground">{t("checkout.upiDesc")}</span>

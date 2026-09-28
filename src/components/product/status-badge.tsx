@@ -57,7 +57,7 @@ export function OrderTimeline({ events, status }: { events: { id: string; status
               {done ? <BadgeCheck className="h-4 w-4" /> : <CircleDashed className="h-3.5 w-3.5 text-muted-foreground/50" />}
             </span>
             <div className="min-w-0 flex-1 pt-0.5">
-              <p className={cn("text-sm", active ? "font-bold text-primary" : done ? "font-semibold" : "text-muted-foreground")}>
+              <p className={cn("text-sm", active ? "font-bold text-foreground" : done ? "font-semibold" : "text-muted-foreground")}>
                 {t(`orders.status.${step}`)}
               </p>
               {ev && (

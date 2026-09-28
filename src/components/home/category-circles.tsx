@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { Link2, Cog, CircleDot, Disc3, Disc, Filter, Zap, CarFront } from "lucide-react";
 import { localizedCatName, useI18n } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, typeof Link2> = {
   link: Link2,
@@ -27,10 +26,7 @@ export function CategoryCircles({ categories }: { categories: Cat[] }) {
           return (
             <Link key={c.id} href={`/category/${c.slug}`} className="flex flex-col items-center gap-1.5">
               <span
-                className={cn(
-                  "grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br text-white shadow-sm transition-transform active:scale-95",
-                  c.gradient
-                )}
+                className="grid h-14 w-14 place-items-center rounded-full border border-amber-200/70 bg-yellow-50 text-amber-600 shadow-sm transition-transform active:scale-95"
               >
                 <Icon className="h-6 w-6" />
               </span>

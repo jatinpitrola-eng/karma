@@ -12,7 +12,7 @@ function SearchInner() {
   return (
     <div className="space-y-4">
       <h1 className="px-1 text-lg font-bold">
-        {t("common.search")}: <span className="text-primary">{query}</span>
+        {t("common.search")}: <span className="font-bold text-foreground">{query}</span>
       </h1>
       <CatalogView query={query} />
     </div>

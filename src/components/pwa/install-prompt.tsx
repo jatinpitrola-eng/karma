@@ -71,7 +71,7 @@ export function InstallPrompt() {
       {showButton && (
         <button
           onClick={onInstallClick}
-          className="fixed bottom-24 right-3 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-pop slide-up-in"
+          className="fixed bottom-24 right-3 z-40 flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-foreground shadow-pop slide-up-in hover:bg-(--primary-hover)"
         >
           <Download className="h-4 w-4" />
           {t("pwa.install")}
@@ -123,7 +123,7 @@ export function InstallPrompt() {
                   <li className="flex items-center gap-3">
                     <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">2</span>
                     <span className="flex items-center gap-1">
-                      {t("pwa.ios2")} <Share2 className="h-4 w-4 text-primary" />
+                      {t("pwa.ios2")} <Share2 className="h-4 w-4 text-amber-600" />
                     </span>
                   </li>
                   <li className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export function InstallPrompt() {
                   <li className="flex items-center gap-3">
                     <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">1</span>
                     <span className="flex items-center gap-1">
-                      {t("pwa.android1")} <MoreVertical className="h-4 w-4 text-primary" />
+                      {t("pwa.android1")} <MoreVertical className="h-4 w-4 text-amber-600" />
                     </span>
                   </li>
                   <li className="flex items-center gap-3">

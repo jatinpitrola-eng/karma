@@ -164,7 +164,7 @@ function ProductForm() {
         <div className="space-y-1.5">
           <Label>{t("seller.productImages")}</Label>
           <div className="flex gap-2">
-            {["from-orange-100 to-amber-200", "from-amber-100 to-orange-200", "from-yellow-100 to-amber-200"].map((g, i) => (
+            {["from-yellow-50 to-amber-100", "from-amber-50 to-yellow-100", "from-yellow-100 to-amber-200"].map((g, i) => (
               <div key={i} className={cn("grid h-16 w-16 place-items-center rounded-lg border bg-gradient-to-br text-xl", g)}>
                 {["🔧", "⚙️", "🔩"][i]}
               </div>

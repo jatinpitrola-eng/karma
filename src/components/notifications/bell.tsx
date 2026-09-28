@@ -26,11 +26,11 @@ export function NotificationBell() {
       <button
         aria-label={t("notif.title")}
         onClick={() => setOpen((v) => !v)}
-        className="relative grid h-10 w-10 place-items-center rounded-full text-white/90 hover:bg-white/10"
+        className="relative grid h-10 w-10 place-items-center rounded-full text-foreground hover:bg-muted"
       >
         <Bell className="h-5 w-5" />
         {unread > 0 && (
-          <span className="absolute right-0.5 top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-yellow-400 px-1 text-[10px] font-bold text-orange-950 live-dot">
+          <span className="absolute right-0.5 top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-foreground live-dot">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -43,7 +43,7 @@ export function NotificationBell() {
             <div className="flex items-center justify-between border-b px-4 py-3">
               <p className="text-sm font-semibold">{t("notif.title")}</p>
               {unread > 0 && (
-                <button onClick={markAllRead} className="flex items-center gap-1 text-xs font-medium text-primary hover:underline">
+                <button onClick={markAllRead} className="flex items-center gap-1 text-xs font-bold text-foreground hover:underline">
                   <Check className="h-3.5 w-3.5" /> {t("notif.markAll")}
                 </button>
               )}
@@ -84,7 +84,7 @@ export function NotificationBell() {
                         !n.read && "bg-secondary/60"
                       )}
                     >
-                      <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+                      <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-amber-600">
                         <Icon className="h-4 w-4" />
                       </span>
                       <span className="min-w-0 flex-1">

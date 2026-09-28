@@ -138,7 +138,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
       {/* Info */}
       <div className="rounded-xl border bg-card p-4 shadow-soft">
-        <p className="text-[11px] font-medium text-primary">{localizedCatName(p.category, lang)}</p>
+        <p className="text-[11px] font-medium text-muted-foreground">{localizedCatName(p.category, lang)}</p>
         <h1 className="mt-0.5 text-lg font-bold leading-snug">{p.name}</h1>
         <div className="mt-2 flex flex-wrap items-baseline gap-2">
           <span className="text-2xl font-extrabold">{formatINR(p.price)}</span>
@@ -167,7 +167,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
         {/* retailer */}
         <div className="mt-3 flex items-center gap-2 rounded-lg bg-secondary p-2.5">
-          <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />
+          <BadgeCheck className="h-4 w-4 shrink-0 text-amber-600" />
           <p className="min-w-0 flex-1 truncate text-xs">
             <span className="text-muted-foreground">{t("product.soldBy")}: </span>
             <span className="font-bold">{p.retailer.businessName}</span>
@@ -201,14 +201,13 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
         <div className="mt-3 grid grid-cols-2 gap-2.5">
           <Button
-            variant="outline"
-            className="h-11 border-primary font-bold text-primary hover:bg-secondary"
+            className="h-11 border border-input bg-primary font-bold text-foreground hover:bg-(--primary-hover)"
             disabled={p.stock === 0 || adding}
             onClick={() => addToCart(false)}
           >
             {added ? t("product.goToCart") : t("product.addToCart")}
           </Button>
-          <Button className="h-11 font-bold" disabled={p.stock === 0 || adding} onClick={() => addToCart(true)}>
+          <Button className="h-11 border border-transparent bg-primary font-bold text-foreground hover:bg-(--primary-hover)" disabled={p.stock === 0 || adding} onClick={() => addToCart(true)}>
             {t("product.buyNow")}
           </Button>
         </div>

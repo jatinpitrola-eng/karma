@@ -25,3 +25,38 @@ Stage Summary:
 - Demo accounts: Admin 9999999999 (secret /admin), Retailer approved 9876543210, Retailer pending 9876500000 (now approved during test; Patel Auto Parts 9812345678 left PENDING for live demo), Customer 9000000001. OTP always 1234.
 - Proof screenshots in /home/z/my-project/download/proof/ (01..25).
 - Seed: `bun prisma/seed.ts` (also `bunx prisma db seed`), additive by stable keys.
+
+---
+Task ID: 2
+Agent: main (Super Z)
+Task: PartKart Theme Overhaul v1.1 — rebrand visual layer from orange (#EA580C) to White + Yellow (#FFC107) without breaking any working flow
+
+Work Log:
+- Read all 25 theme-relevant files; mapped every orange/red/rainbow reference across src/.
+- globals.css: new token set — background #FAFAF7, card #FFFFFF, primary #FFC107 (+ --primary-hover #FFB300), primary-foreground #1A1A1A (black text on yellow), secondary/accent #FEF7E0 yellow tints, ring #FFB300, border #E9E7E0, footer-bg #F5F5F0; .dark synced; added .bg-footer helper; global sonner overrides (white bg, black text, 4px yellow left border; success green, error red; yellow action button).
+- button.tsx: default variant hover → bg-(--primary-hover) (#FFB300) instead of opacity-lightened yellow.
+- layout.tsx themeColor #FFC107; manifest.json theme_color #FFC107 + background_color #FFFFFF; sw.js VERSION bumped partkart-v2→v3 (purges old caches on activate).
+- make-icons.js regenerated: yellow gradient (#FFD54F→#FFC107→#FFB300) bg, black gear ring + black PartKart wordmark, white wrench — icon-192 3.9KB, icon-512 19.4KB, maskable 21.2KB.
+- AppHeader: plain white + border-b (no gradient); yellow logo chip w/ black wrench; "PartKart" black; search pill white + yellow focus ring (border-primary/70 + ring-primary/30); language switcher white pill w/ black text; suggestion price black; active lang row black + yellow dot.
+- BottomNav: solid white; active tab = yellow icon + black label + yellow top bar; cart badge bg-primary + black number.
+- CategoryCircles: ONE style — bg-yellow-50 + border-amber-200/70 + text-amber-600 icons (DB gradient ignored); removed cn import.
+- HeroCarousel: 4 amber/yellow gradient slides (amber-400→yellow-300 family), dark ink text, black CTA pill with yellow text, dark dots.
+- CountdownStrip: bg-primary yellow + black text, black chip with yellow mono countdown.
+- VehicleSelector: selected card = white + border-2 border-primary; unselected white; chips yellow bg + black text; model chips yellow-tint; clear button black text.
+- ProductCard/format.ts/retailer-products API/seller-new-product/seed.ts: ALL placeholder gradients normalized to yellow-50/amber-100 family (ordered sed, no token collisions); seed category gradients yellow family; seed re-run ×2 → identical counts 8/7/40/52/5/7/8/1/17 (idempotent).
+- Footer: bg #F5F5F0, black text, links hover #F59E0B yellow underline.
+- Login page: yellow logo chip; Send/Verify default yellow buttons (black text); Demo-OTP banner auto yellow tint.
+- Account: yellow avatar chip, amber-600 menu icons, language value black; logout red kept.
+- Product page: Add to Cart AND Buy Now = bg-primary + text-foreground + bold (border-input ring on ATC); category label muted; BadgeCheck amber-600.
+- Checkout: amber-600 icons, "+ Add New" black, selected address/payment = yellow border + yellow tint; UPI dialog yellow Pay button; green success screens untouched.
+- Seller Hub: StatCard rebuilt — white cards + yellow icon chips (Package/ShoppingCart/Banknote/Timer), warn = red tint; Add Product = black chip + yellow text; pending gate unchanged; SellerNav active = yellow.
+- Admin: Stat rebuilt white + yellow icon chips (Banknote/ShoppingCart/Users/Boxes/Store/Timer/Warehouse), warn red kept; Approve buttons = yellow bg black text (both approvals + retailers tabs); Block red outline kept; low-stock red kept; admin login dark chip kept.
+- Bell: black icon on white header, unread badge yellow bg + black number, chips bg-primary/15 + amber-600, mark-all black.
+- InstallPrompt: floating button yellow + black + hover; step chips yellow/black; Share/More icons amber-600.
+- status-badge.tsx: timeline active step label text-primary→text-foreground (yellow text unreadable); all status colors (sky/indigo/amber/violet/green/red + green checks + red cancel) preserved.
+- Deals page banner: amber-400→yellow-300 with dark text. Search page query black. provider Toaster: removed richColors (CSS override handles styling).
+
+Stage Summary:
+- Theme fully rebranded to White + Yellow; zero functional changes; lint 0 errors; dev.log clean; console clean.
+- E2E re-verified (agent-browser 390px & 360px): vehicle select+filter+clear; product ATC/BuyNow; customer login 9000000001; COD order ORD-2026-1009; mock UPI order ORD-2026-1010 (VPA→Pay→spinner→green tick→placed); coupon DEMO10 −10% (−₹30 on ₹299, total 318) with green discount line; order timeline green; retailer 9876543210 login → stats 14/7/₹6,122/3 → Confirm ORD-1010 → "Updated successfully" toast + Mark Packed; admin 9999999999 → dashboard white/yellow stat cards → approved Modi Spare House (9876500000) → toast "Retailer approved" → retailer portal unlocked + "Your account is approved!" bell notification; EN/HI/GU switch live on home; toast = white + yellow left border; scrollWidth==clientWidth at 360 AND 390 on /, /cart, /product/*, /checkout; no console errors.
+- Proof: /home/z/my-project/download/proof2/ (t1…t29: home, vehicle-selected, product, CTA, login, cart-coupon, checkout, COD placed, UPI dialog/processing/success/placed, timeline, HI, GU, account, retailer dashboard/orders/confirm, admin dashboard/approvals/approved/lowstock, retailer unlocked + approval notification, final home/deals/categories, toast style).

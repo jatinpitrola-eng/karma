@@ -20,7 +20,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 backdrop-blur pb-safe" aria-label="Primary">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-white pb-safe" aria-label="Primary">
       <div className="mx-auto flex max-w-5xl">
         {tabs.map((tab) => {
           const active = tab.exact ? pathname === tab.href : pathname.startsWith(tab.href);
@@ -31,13 +31,13 @@ export function BottomNav() {
               href={tab.href}
               className={cn(
                 "relative flex min-h-[56px] flex-1 flex-col items-center justify-center gap-0.5 py-1.5 text-[10.5px] font-medium transition-colors",
-                active ? "text-primary" : "text-muted-foreground"
+                active ? "text-foreground" : "text-muted-foreground"
               )}
             >
-              <span className="relative">
+              <span className={cn("relative", active && "text-primary")}>
                 <Icon className={cn("h-5 w-5", active && "stroke-[2.4]")} />
                 {!!tab.badge && tab.badge > 0 && (
-                  <span className="absolute -right-2.5 -top-1.5 grid h-4.5 min-w-4.5 place-items-center rounded-full bg-primary px-1 py-0 text-[9px] font-bold text-primary-foreground">
+                  <span className="absolute -right-2.5 -top-1.5 grid h-4.5 min-w-4.5 place-items-center rounded-full bg-primary px-1 py-0 text-[9px] font-bold text-foreground">
                     {tab.badge > 9 ? "9+" : tab.badge}
                   </span>
                 )}
