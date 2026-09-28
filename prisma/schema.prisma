@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ENUMS (as strings for sqlite) ============
+// Role: CUSTOMER | RETAILER | ADMIN
+// RetailerStatus: PENDING | APPROVED | BLOCKED
+// OrderStatus: PLACED | CONFIRMED | PACKED | SHIPPED | DELIVERED | CANCELLED
+// PaymentMethod: COD | UPI
+// PaymentStatus: PENDING | PAID | FAILED
+
+model User {
+  id           String         @id @default(cuid())
+  phone        String         @unique
+  name         String?
+  role         String         @default("CUSTOMER") // CUSTOMER | RETAILER | ADMIN
+  sessions     Session[]
+  addresses    Address[]
+  orders       Order[]
+  notifications Notification[]
+  cartItems    CartItem[]
+  retailer     Retailer?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Retailer {
+  id           String   @id @default(cuid())
+  phone        String   @unique
+  businessName String
+  ownerName    String
+  city         String
+  categorySlugs String  @default("") // comma separated category slugs
+  status       String   @default("PENDING") // PENDING | APPROVED | BLOCKED
+  userId       String?  @unique
+  user         User?    @relation(fields: [userId], references: [id])
+  products     Product[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  name      String
+  nameHi    String
+  nameGu    String
+  icon      String    @default("wrench")
+  gradient  String    @default("from-orange-400 to-red-500")
+  sortOrder Int       @default(0)
+  active    Boolean   @default(true)
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Vehicle {
+  id         String  @id @default(cuid())
+  key        String  @unique // e.g. "hero-splendor-plus"
+  type       String // BIKE | SCOOTER | CAR
+  brand      String
+  model      String
+  active     Boolean @default(true)
+  products   ProductVehicle[]
+}
+
+model Product {
+  id          String          @id @default(cuid())
+  key         String          @unique // stable seed key
+  slug        String          @unique
+  name        String
+  partNumber  String
+  description String          @default("")
+  categoryId  String
+  category    Category        @relation(fields: [categoryId], references: [id])
+  retailerId  String
+  retailer    Retailer        @relation(fields: [retailerId], references: [id])
+  price       Int // INR
+  mrp         Int // INR
+  stock       Int             @default(10)
+  images      String          @default("[]") // JSON array of gradient/image specs
+  active      Boolean         @default(true)
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+  vehicles    ProductVehicle[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model ProductVehicle {
+  productId String
+  vehicleId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@id([productId, vehicleId])
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  qty       Int      @default(1)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Address {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  pincode   String
+  line      String
+  city      String
+  state     String  @default("")
+  isDefault Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  code          String      @unique // ORD-2026-0001
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  addressJson   String // snapshot of address
+  itemsTotal    Int
+  deliveryFee   Int         @default(0)
+  discount      Int         @default(0)
+  couponCode    String?
+  total         Int
+  paymentMethod String      @default("COD") // COD | UPI
+  paymentStatus String      @default("PENDING") // PENDING | PAID
+  status        String      @default("PLACED") // PLACED | CONFIRMED | PACKED | SHIPPED | DELIVERED | CANCELLED
+  items         OrderItem[]
+  events        OrderEvent[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id])
+  retailerId String? // tenant snapshot
+  name       String // snapshot
+  image      String  @default("")
+  price      Int // snapshot
+  qty        Int
+}
+
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  note      String   @default("")
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String   @default("")
+  type      String   @default("INFO") // ORDER | RETAILER | ADMIN | PROMO | INFO
+  link      String   @default("")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
