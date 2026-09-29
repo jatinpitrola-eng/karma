@@ -3,6 +3,25 @@ import { db } from "@/lib/db";
 import { getSessionUser } from "@/lib/session";
 import { notify } from "@/lib/notify";
 
+// Parse the order's address snapshot (legacy orders may hold empty/invalid JSON)
+function parseAddressSnapshot(json: string) {
+  try {
+    const a = JSON.parse(json || "null");
+    if (a && typeof a === "object" && !Array.isArray(a)) {
+      const addr = {
+        name: String(a.name ?? ""),
+        phone: String(a.phone ?? ""),
+        pincode: String(a.pincode ?? ""),
+        line: String(a.line ?? ""),
+        city: String(a.city ?? ""),
+        state: String(a.state ?? ""),
+      };
+      if (addr.name || addr.line || addr.city || addr.pincode) return addr;
+    }
+  } catch {}
+  return null;
+}
+
 // GET /api/orders/[id] — order detail (owner, retailer with items, or admin)
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const user = await getSessionUser(req);
@@ -40,7 +59,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!isOwner && !isAdmin && !isSelling) {
     return NextResponse.json({ order: null }, { status: 403 });
   }
-  return NextResponse.json({ order: { ...order, items: itemsWithStore } });
+  return NextResponse.json({
+    order: { ...order, items: itemsWithStore, address: parseAddressSnapshot(order.addressJson) },
+  });
 }
 
 // POST /api/orders/[id]/cancel is handled via PATCH here — cancel order (owner while PLACED/CONFIRMED, admin always)

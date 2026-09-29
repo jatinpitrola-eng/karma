@@ -26,6 +26,25 @@ export function SellerGate({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // Logged in but NOT a retailer (customer or admin) → seller gate, never the seller surface
+  if (me.role !== "RETAILER") {
+    return (
+      <div className="mx-auto grid max-w-md place-items-center rounded-md bg-card px-6 py-14 text-center shadow-fk">
+        <span className="grid h-14 w-14 place-items-center rounded-full bg-accent">
+          <Store className="h-7 w-7 text-fk-blue" />
+        </span>
+        <p className="mt-3 text-sm font-bold">{t("seller.customerGateTitle")}</p>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t("seller.customerGateBody")}</p>
+        <Link href="/seller/signup" className="mt-5 w-full rounded-sm bg-fk-blue px-6 py-2.5 text-sm font-bold text-white hover:bg-fk-blue-dark">
+          {t("seller.becomeSeller")} →
+        </Link>
+        <Link href="/auth/login?next=/seller" className="mt-2.5 w-full rounded-sm border border-border bg-card px-6 py-2.5 text-sm font-bold text-fk-blue">
+          {t("seller.loginAsRetailer")}
+        </Link>
+      </div>
+    );
+  }
+
   if (me.retailer && me.retailer.status === "BLOCKED") {
     return (
       <div className="mx-auto grid max-w-md place-items-center rounded-md bg-card py-16 px-6 text-center">

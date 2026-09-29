@@ -8,6 +8,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (!user || user.role !== "RETAILER") return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
   const retailer = await db.retailer.findUnique({ where: { userId: user.id } });
   if (!retailer) return NextResponse.json({ ok: false, error: "NO_RETAILER" }, { status: 404 });
+  if (retailer.status !== "APPROVED") {
+    return NextResponse.json({ ok: false, error: "PENDING_APPROVAL" }, { status: 403 });
+  }
 
   const { id } = await params;
   // tenant check: product must belong to this retailer

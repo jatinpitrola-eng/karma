@@ -110,3 +110,24 @@ Work Log:
 Stage Summary:
 - App fully unbricked and feature-complete; demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212 approved, 9111100002 Sharma Motor Parts new · Customer 9000000001 · OTP 1234 · /admin unlisted).
 - Proof: /home/z/my-project/download/proof4/ (r1-r28: home, retailers, product, sold-by card, signup, pending, approvals, approved, add-product, saved, new-product card+page, cart+coupon, COD, UPI success, order detail, retailer isolation, admin ₹, Hindi, 360px category).
+
+---
+Task ID: 5
+Agent: main (Super Z)
+Task: PartKart v2.2 hotfix pass — FIX 1 (order detail empty delivery address), FIX 2 (seller gate role check), regression
+
+Work Log:
+- FIX 1 root cause: POST /api/orders always saved full address snapshot in Order.addressJson (name/phone/line/city/state/pincode) — data was never lost; but GET /api/orders/[id] returned raw addressJson string while the page expected a parsed order.address object → every order rendered "· , —". Admin (/api/admin/orders L31) and retailer (/api/retailer/orders L32) endpoints already parsed it.
+- FIX 1a: /api/orders/[id] GET now returns `address` via new parseAddressSnapshot() (normalizes 6 fields, returns null for legacy/empty/invalid JSON; returns addressJson unchanged for compat).
+- FIX 1b: /orders/[id] page — Flipkart-style DELIVERY ADDRESS card: bold name · phone, full address line on its own row, "city, state — pincode" (state rendered when present), graceful "orders.addressUnavailable" fallback (new i18n key) instead of blank separators.
+- FIX 1c: /admin All Orders card now renders "📍 line, city — pincode" under the customer row (AdminOrder type extended; API already supplied address).
+- Retailer /seller/orders view verified (already parsed + rendered 📍 line) — no change needed.
+- FIX 2a: SellerGate (src/app/seller/seller-ui.tsx) new branch — logged-in user with role !== RETAILER (customer or admin) gets gate screen: Store icon chip + "You are logged in as a customer" + "Log in with your seller account or become a seller to add products on PartKart." + primary "Become a Seller →" (/seller/signup) + secondary "Login as retailer" (/auth/login?next=/seller). PENDING → awaiting-approval screen and APPROVED → form unchanged. Protects /seller, /seller/products, /seller/products/new, /seller/orders (all wrap SellerGate).
+- FIX 2b: server-side — POST /api/retailer/products already enforced role RETAILER + status APPROVED (403); PATCH /api/retailer/products/[id] now also requires APPROVED (403 PENDING_APPROVAL) so no seller surface works off-UI.
+- i18n: +2 keys ×3 langs (seller.customerGateTitle, seller.customerGateBody) + orders.addressUnavailable ×3. Reused existing seller.becomeSeller / seller.loginAsRetailer. EN/HI/GU verified pure on gate + order detail.
+- Build: npm run build ✓ zero errors/warnings (45 routes). tsc noise pre-existing (examples/, skills/ outside app).
+- E2E (agent-browser 390px+360px): guest /seller/products/new → login gate ✓; customer 9000000001 → gate on /seller, /seller/products/new, /seller/orders (no form) ✓; approved retailer 9876543210 → full Add Product form ✓; customer session fetch POST /api/retailer/products → 403 FORBIDDEN, PATCH → 403 ✓. Order flow: cart 🛍 Sharma Motor Parts → checkout prefilled (Aarav Shah · 9000000001 · B-402 Sunrise Residency, Satellite Road, Ahmedabad — 380015) → COD ORD-2026-1016 → detail shows full Flipkart address card + state "Gujarat" + per-item store name ✓; QA's broken ORD-2026-1015 now renders full address too (legacy data was intact) ✓; admin All Orders shows 📍 address on every order ✓; retailer orders show 📍 address + tenant isolation ✓. GU gate: "તમે ગ્રાહક ખાતામાં પ્રવેશ્યા છે / વેપારી બનો → / વેપારી તરીકે લોગિન કરો" 100% pure ✓; GU/HI order detail labels pure, address content as entered ✓. No h-scroll 390 & 360 on /orders/[id], /seller/products/new, /checkout, /cart, /admin ✓. Console clean home+order detail ✓; home/category(14)/deals store lines present (v2.1 permanent rule intact) ✓; PWA install pill + glass header + Flipkart theme untouched ✓.
+- Proof: /home/z/my-project/download/proof5/ (01 customer-gate, 02 order-detail-full-address, 03 admin-orders-address, 04 retailer-sees-form, 05 gate-gujarati, 06 order-detail-gujarati).
+
+Stage Summary:
+- v2.2 deployed on the live preview (same persistent preview URL — workspace :3000 via gateway; dev.log clean). Demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212/9111100002 approved · Customer 9000000001 · OTP 1234 · /admin unlisted). Flipkart theme, retailer-name visibility, notifications, i18n, PWA, seed, tenant isolation all untouched per DO NOT.

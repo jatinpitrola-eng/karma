@@ -23,7 +23,7 @@ type Order = {
   paymentMethod: string;
   paymentStatus: string;
   createdAt: string;
-  address: { name: string; phone: string; pincode: string; line: string; city: string; state?: string };
+  address: { name: string; phone: string; pincode: string; line: string; city: string; state?: string } | null;
   items: { id: string; name: string; image: string; price: number; qty: number; storeName?: string | null }[];
   events: { id: string; status: string; createdAt: string }[];
 };
@@ -151,12 +151,23 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         <h2 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" /> {t("checkout.deliveryAddress")}
         </h2>
-        <p className="mt-2 text-sm font-bold">
-          {order.address?.name} <span className="font-normal text-muted-foreground">· {order.address?.phone}</span>
-        </p>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          {order.address?.line}, {order.address?.city} — {order.address?.pincode}
-        </p>
+        {order.address ? (
+          <div className="mt-2">
+            <p className="text-sm font-bold">
+              {order.address.name}
+              {order.address.phone && (
+                <span className="font-normal text-muted-foreground"> · {order.address.phone}</span>
+              )}
+            </p>
+            {order.address.line && <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{order.address.line}</p>}
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {order.address.city}
+              {order.address.state ? `, ${order.address.state}` : ""} — {order.address.pincode}
+            </p>
+          </div>
+        ) : (
+          <p className="mt-2 text-xs text-muted-foreground">{t("orders.addressUnavailable")}</p>
+        )}
         <p className="mt-1 text-[11px] text-muted-foreground">
           {t("orders.placedOn")}: {formatDate(order.createdAt)}
         </p>

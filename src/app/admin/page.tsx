@@ -289,6 +289,11 @@ export default function AdminPage() {
                 <p className="mt-1 text-[11px] text-muted-foreground">
                   {o.customer?.name} · +91 {o.customer?.phone} · {formatDate(o.createdAt)} · {o.paymentMethod}
                 </p>
+                {o.address?.line && (
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">
+                    📍 {o.address.line}, {o.address.city} — {o.address.pincode}
+                  </p>
+                )}
                 <p className="mt-1 text-xs">{o.items.map((i) => `${i.name} ×${i.qty}`).join(", ")}</p>
                 <p className="mt-1 text-sm font-bold">{formatINR(o.total)}</p>
               </div>
@@ -435,5 +440,5 @@ function StatusChip({ status }: { status: string }) {
 
 type AdminRetailer = { id: string; businessName: string; ownerName: string; phone: string; city: string; categorySlugs: string; status: string; productCount: number };
 type AdminProduct = { id: string; name: string; partNumber: string; price: number; mrp: number; stock: number; active: boolean; retailer: { businessName: string } };
-type AdminOrder = { id: string; code: string; status: string; total: number; paymentMethod: string; createdAt: string; customer: { name: string | null; phone: string }; items: { name: string; qty: number }[] };
+type AdminOrder = { id: string; code: string; status: string; total: number; paymentMethod: string; createdAt: string; customer: { name: string | null; phone: string }; address?: { name?: string; line?: string; city?: string; pincode?: string } | null; items: { name: string; qty: number }[] };
 type AdminCustomer = { id: string; name: string | null; phone: string; orderCount: number };
