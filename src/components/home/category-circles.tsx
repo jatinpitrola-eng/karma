@@ -1,41 +1,25 @@
 "use client";
 import Link from "next/link";
-import { Link2, Cog, CircleDot, Disc3, Disc, Filter, Zap, CarFront } from "lucide-react";
 import { localizedCatName, useI18n } from "@/lib/i18n";
+import { PartImg } from "@/components/product/part-img";
 
-const ICONS: Record<string, typeof Link2> = {
-  link: Link2,
-  cog: Cog,
-  "circle-dot": CircleDot,
-  "disc-3": Disc3,
-  disc: Disc,
-  filter: Filter,
-  zap: Zap,
-  "car-front": CarFront,
-};
-
-export type Cat = { id: string; slug: string; name: string; nameHi: string; nameGu: string; icon: string; gradient: string; count: number };
+export type Cat = { id: string; slug: string; name: string; nameHi: string; nameGu: string; icon: string; gradient: string; imageUrl?: string; count: number };
 
 export function CategoryCircles({ categories }: { categories: Cat[] }) {
   const { lang } = useI18n();
   return (
-    <div className="rounded-xl border bg-card p-3 shadow-soft">
-      <div className="grid grid-cols-4 gap-y-3 sm:grid-cols-8">
-        {categories.map((c) => {
-          const Icon = ICONS[c.icon] ?? Cog;
-          return (
-            <Link key={c.id} href={`/category/${c.slug}`} className="flex flex-col items-center gap-1.5">
-              <span
-                className="grid h-14 w-14 place-items-center rounded-full border border-amber-200/70 bg-yellow-50 text-amber-600 shadow-sm transition-transform active:scale-95"
-              >
-                <Icon className="h-6 w-6" />
-              </span>
-              <span className="line-clamp-2 text-center text-[10.5px] font-medium leading-tight">
-                {localizedCatName(c, lang)}
-              </span>
-            </Link>
-          );
-        })}
+    <div className="rounded-md bg-card p-3 shadow-fk">
+      <div className="flex gap-4 overflow-x-auto pb-1 no-scrollbar sm:justify-between sm:gap-2">
+        {categories.map((c) => (
+          <Link key={c.id} href={`/category/${c.slug}`} className="flex w-[72px] shrink-0 flex-col items-center gap-1.5 sm:w-auto">
+            <span className="h-16 w-16 overflow-hidden rounded-full shadow-md ring-2 ring-white transition-transform active:scale-95">
+              <PartImg src={c.imageUrl} alt={localizedCatName(c, lang)} className="h-full w-full object-cover" />
+            </span>
+            <span className="line-clamp-2 text-center text-xs leading-tight text-fk-text">
+              {localizedCatName(c, lang)}
+            </span>
+          </Link>
+        ))}
       </div>
     </div>
   );

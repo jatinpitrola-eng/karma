@@ -6,8 +6,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-deva: var(--font-devanagari);
+  --font-guju: var(--font-gujarati);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -41,79 +42,91 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Flipkart exact brand tokens */
+  --color-fk-blue: #2874f0;
+  --color-fk-blue-dark: #1a5cbe;
+  --color-fk-bg: #f1f3f6;
+  --color-fk-yellow: #ffe11b;
+  --color-fk-orange: #ff9f00;
+  --color-fk-coral: #fb641b;
+  --color-fk-green: #388e3c;
+  --color-fk-text: #212121;
+  --color-fk-muted: #878787;
+  --color-fk-border: #e0e0e0;
 }
 
-/* PartKart design system — clean WHITE + YELLOW (#FFC107), simple & premium, rounded-xl, soft shadows */
+/* PartKart design system — FLIPKART EXACT (#2874F0 blue / #F1F3F6 bg / yellow #FFE11B accents) */
 :root {
-  --radius: 0.75rem;
-  --background: #fafaf7;
-  --foreground: #1a1a1a;
+  --radius: 0.375rem; /* 6px — Flipkart cards 4-6px, buttons 2px via radius-sm */
+  --background: #f1f3f6;
+  --foreground: #212121;
   --card: #ffffff;
-  --card-foreground: #1a1a1a;
+  --card-foreground: #212121;
   --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
-  --primary: #ffc107;
-  --primary-hover: #ffb300;
-  --primary-foreground: #1a1a1a;
-  --secondary: #fef7e0;
-  --secondary-foreground: #1a1a1a;
-  --muted: #f5f5f2;
-  --muted-foreground: #6b6b6b;
-  --accent: #fef7e0;
-  --accent-foreground: #1a1a1a;
+  --popover-foreground: #212121;
+  --primary: #2874f0;
+  --primary-hover: #1a5cbe;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f5fa;
+  --secondary-foreground: #212121;
+  --muted: #f5f6f8;
+  --muted-foreground: #878787;
+  --accent: #e8f0fe;
+  --accent-foreground: #1a5cbe;
   --destructive: #dc2626;
-  --border: #e9e7e0;
-  --input: #e9e7e0;
-  --ring: #ffb300;
-  --chart-1: #ffc107;
-  --chart-2: #1a1a1a;
-  --chart-3: #16a34a;
-  --chart-4: #f59e0b;
-  --chart-5: #78716c;
+  --border: #e0e0e0;
+  --input: #e0e0e0;
+  --ring: #2874f0;
+  --chart-1: #2874f0;
+  --chart-2: #388e3c;
+  --chart-3: #fb641b;
+  --chart-4: #ffe11b;
+  --chart-5: #878787;
   --sidebar: #ffffff;
-  --sidebar-foreground: #1a1a1a;
-  --sidebar-primary: #ffc107;
-  --sidebar-primary-foreground: #1a1a1a;
-  --sidebar-accent: #fef7e0;
-  --sidebar-accent-foreground: #1a1a1a;
-  --sidebar-border: #e9e7e0;
-  --sidebar-ring: #ffb300;
-  --footer-bg: #f5f5f0;
+  --sidebar-foreground: #212121;
+  --sidebar-primary: #2874f0;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8f0fe;
+  --sidebar-accent-foreground: #1a5cbe;
+  --sidebar-border: #e0e0e0;
+  --sidebar-ring: #2874f0;
+  --footer-bg: #f1f3f6;
 }
 
 .dark {
-  --background: #0c0a09;
-  --foreground: #f5f5f4;
-  --card: #1c1917;
-  --card-foreground: #f5f5f4;
-  --popover: #1c1917;
-  --popover-foreground: #f5f5f4;
-  --primary: #ffc107;
-  --primary-hover: #ffb300;
-  --primary-foreground: #1a1a1a;
-  --secondary: #292524;
-  --secondary-foreground: #fde68a;
-  --muted: #292524;
-  --muted-foreground: #a8a29e;
-  --accent: #292524;
-  --accent-foreground: #fde68a;
+  --background: #0f1115;
+  --foreground: #f1f3f6;
+  --card: #171a21;
+  --card-foreground: #f1f3f6;
+  --popover: #171a21;
+  --popover-foreground: #f1f3f6;
+  --primary: #2874f0;
+  --primary-hover: #1a5cbe;
+  --primary-foreground: #ffffff;
+  --secondary: #232733;
+  --secondary-foreground: #f1f3f6;
+  --muted: #232733;
+  --muted-foreground: #9aa0aa;
+  --accent: #1c2a44;
+  --accent-foreground: #9cc0ff;
   --destructive: #ef4444;
-  --border: #292524;
-  --input: #292524;
-  --ring: #ffb300;
-  --chart-1: #ffc107;
-  --chart-2: #f59e0b;
-  --chart-3: #22c55e;
-  --chart-4: #fde68a;
-  --chart-5: #a78bfa;
-  --sidebar: #1c1917;
-  --sidebar-foreground: #f5f5f4;
-  --sidebar-primary: #ffc107;
-  --sidebar-primary-foreground: #1a1a1a;
-  --sidebar-accent: #292524;
-  --sidebar-accent-foreground: #fde68a;
-  --sidebar-border: #292524;
-  --sidebar-ring: #ffb300;
+  --border: #232733;
+  --input: #232733;
+  --ring: #2874f0;
+  --chart-1: #2874f0;
+  --chart-2: #22c55e;
+  --chart-3: #fb641b;
+  --chart-4: #ffe11b;
+  --chart-5: #9aa0aa;
+  --sidebar: #171a21;
+  --sidebar-foreground: #f1f3f6;
+  --sidebar-primary: #2874f0;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1c2a44;
+  --sidebar-accent-foreground: #9cc0ff;
+  --sidebar-border: #232733;
+  --sidebar-ring: #2874f0;
 }
 
 @layer base {
@@ -129,6 +142,27 @@
     @apply bg-background text-foreground;
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* ============ GLASS NAVBARS — the client's signature (MANDATORY, -webkit- prefixes for iOS Safari) ============ */
+.fk-glass-header {
+  background: rgba(40, 116, 240, 0.78);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 14px rgba(40, 116, 240, 0.28);
+}
+.fk-glass-bottomnav {
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+.fk-glass-actionbar {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* thin scrollbars for horizontal strips */
@@ -148,12 +182,12 @@
   border-radius: 4px;
 }
 
-/* soft app shadows */
-.shadow-soft {
-  box-shadow: 0 1px 3px rgb(28 25 23 / 0.06), 0 1px 2px rgb(28 25 23 / 0.04);
+/* Flipkart card shadow — 0 1px 2px rgba(0,0,0,.08), 0 1px 6px rgba(0,0,0,.05) */
+.shadow-fk {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 1px 6px rgb(0 0 0 / 0.05);
 }
-.shadow-pop {
-  box-shadow: 0 4px 16px rgb(28 25 23 / 0.1), 0 1px 4px rgb(28 25 23 / 0.06);
+.shadow-fk-lift {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.12), 0 2px 12px rgb(0 0 0 / 0.08);
 }
 
 /* safe area for bottom nav */
@@ -189,34 +223,51 @@
   animation: pk-slide-up 0.25s ease-out both;
 }
 
-/* footer light gray (Fix 2) */
+/* footer */
 .bg-footer {
   background-color: var(--footer-bg);
 }
 
-/* Sonner toasts — white bg, black text, yellow left border; success green, error red (Fix 2) */
+/* Sonner toasts — white bg, dark text, blue left border; success green, error red */
 [data-sonner-toast] {
   background: #ffffff !important;
-  color: #1a1a1a !important;
-  border: 1px solid #e9e7e0 !important;
-  border-left: 4px solid #ffc107 !important;
-  border-radius: 12px !important;
+  color: #212121 !important;
+  border: 1px solid #e0e0e0 !important;
+  border-left: 4px solid #2874f0 !important;
+  border-radius: 6px !important;
 }
 [data-sonner-toast][data-type="success"] {
-  border-left-color: #16a34a !important;
+  border-left-color: #388e3c !important;
 }
 [data-sonner-toast][data-type="error"] {
   border-left-color: #dc2626 !important;
 }
 [data-sonner-toast] [data-description] {
-  color: #6b6b6b !important;
+  color: #878787 !important;
 }
 [data-sonner-toast] [data-button] {
-  background: #ffc107 !important;
-  color: #1a1a1a !important;
+  background: #2874f0 !important;
+  color: #ffffff !important;
   border: none !important;
-  border-radius: 8px !important;
+  border-radius: 4px !important;
   font-weight: 700;
 }
 
-/* pk-theme */
+/* Flipkart listing-price typography helpers */
+.fk-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+}
+.fk-mrp {
+  font-size: 12px;
+  color: #878787;
+  text-decoration: line-through;
+}
+.fk-off {
+  font-size: 13px;
+  font-weight: 700;
+  color: #388e3c;
+}
+
+/* pk-flipkart-theme */

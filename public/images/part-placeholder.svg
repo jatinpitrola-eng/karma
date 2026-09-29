@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#F1F3F6"/>
+  <g transform="translate(300 250)" fill="none" stroke="#2874F0" stroke-width="14" opacity="0.55">
+    <circle r="74"/>
+    <g stroke="none" fill="#2874F0" opacity="0.55">
+      <circle cx="0" cy="-96" r="14"/>
+      <circle cx="83" cy="-48" r="14"/>
+      <circle cx="83" cy="48" r="14"/>
+      <circle cx="0" cy="96" r="14"/>
+      <circle cx="-83" cy="48" r="14"/>
+      <circle cx="-83" cy="-48" r="14"/>
+    </g>
+    <circle r="26" fill="#F1F3F6" stroke="none"/>
+    <circle r="26"/>
+  </g>
+  <text x="300" y="425" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" fill="#2874F0" text-anchor="middle" opacity="0.75">PartKart</text>
+  <text x="300" y="470" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="500" fill="#878787" text-anchor="middle">Explore Parts+</text>
+</svg>

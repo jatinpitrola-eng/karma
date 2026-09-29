@@ -6,9 +6,12 @@ export default function DealsPage() {
   const { t } = useI18n();
   return (
     <div className="space-y-4">
-      <div className="rounded-xl bg-gradient-to-r from-amber-400 to-yellow-300 px-4 py-3.5 shadow-soft">
-        <h1 className="text-lg font-extrabold text-foreground">{t("home.dealsOfDay")}</h1>
-        <p className="text-xs text-foreground/75">{t("home.hero1.sub")}</p>
+      <div
+        className="rounded-md px-4 py-4 shadow-fk"
+        style={{ background: "linear-gradient(100deg, #2874F0 55%, #1A5CBE 100%)" }}
+      >
+        <h1 className="text-lg font-extrabold text-white">⚡ {t("home.dealsOfDay")}</h1>
+        <p className="text-xs font-semibold text-fk-yellow">{t("home.hero1.sub")}</p>
       </div>
       <CatalogView deals />
     </div>

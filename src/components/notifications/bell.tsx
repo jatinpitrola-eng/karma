@@ -26,11 +26,11 @@ export function NotificationBell() {
       <button
         aria-label={t("notif.title")}
         onClick={() => setOpen((v) => !v)}
-        className="relative grid h-10 w-10 place-items-center rounded-full text-foreground hover:bg-muted"
+        className="relative grid h-9 w-9 place-items-center rounded-md text-white hover:bg-white/10"
       >
         <Bell className="h-5 w-5" />
         {unread > 0 && (
-          <span className="absolute right-0.5 top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-foreground live-dot">
+          <span className="absolute right-0.5 top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-fk-yellow px-1 text-[10px] font-bold text-fk-text live-dot">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -84,7 +84,7 @@ export function NotificationBell() {
                         !n.read && "bg-secondary/60"
                       )}
                     >
-                      <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-amber-600">
+                      <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent text-fk-blue">
                         <Icon className="h-4 w-4" />
                       </span>
                       <span className="min-w-0 flex-1">

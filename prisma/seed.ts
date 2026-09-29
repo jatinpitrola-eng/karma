@@ -1,39 +1,59 @@
 /**
- * PartKart seed — ADDITIVE & RE-RUN SAFE
+ * PartKart seed — ADDITIVE & RE-RUN SAFE (v2 Flipkart catalog)
  * - Every entity is upserted by a stable unique key (slug / key / phone / code)
- * - Second run produces identical row counts, zero duplicates, zero deletes
- * - Prints seeded counts at the end
+ * - Second run produces identical row counts, zero duplicates
+ * - Products use REAL verified photos (Pexels/Unsplash pool) via images JSON [{url}]
  */
 import { PrismaClient } from "@prisma/client";
 
 const db = new PrismaClient();
 
-// ---------------- helpers ----------------
-const g = (a: string, b: string, c: string) => JSON.stringify([{ g: `${a} ${b} ${c}` }]);
-const img3 = (base: string, e: string) =>
-  JSON.stringify([
-    { g: base, e },
-    { g: base.replace("100", "50").replace("200", "100"), e },
-    { g: base.replace("orange", "amber").replace("red", "rose"), e },
-  ]);
+// ---------------- verified image pool ----------------
+const IMG = {
+  engineBW: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg?auto=compress&cs=tinysrgb&w=600", // gears/sprockets/pulleys
+  beltPulley: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=600&auto=format&fit=crop", // belt & pulley
+  oilPour: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=600&auto=format&fit=crop",
+  wheelWrench: "https://images.unsplash.com/photo-1613214149922-f1809c99b414?q=80&w=600&auto=format&fit=crop",
+  wheelBalance: "https://images.pexels.com/photos/3806288/pexels-photo-3806288.jpeg?auto=compress&cs=tinysrgb&w=600",
+  dashboard: "https://images.unsplash.com/photo-1610647752706-3bb12232b3ab?q=80&w=600&auto=format&fit=crop",
+  speedo: "https://images.pexels.com/photos/248747/pexels-photo-248747.jpeg?auto=compress&cs=tinysrgb&w=600",
+  spanner: "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?q=80&w=600&auto=format&fit=crop",
+  jeep: "https://images.unsplash.com/photo-1504222490345-c075b6008014?q=80&w=600&auto=format&fit=crop",
+  wrench: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=600&auto=format&fit=crop",
+  inspect: "https://images.pexels.com/photos/3807277/pexels-photo-3807277.jpeg?auto=compress&cs=tinysrgb&w=600",
+  garage: "https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=600",
+  bikeRed: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=600&auto=format&fit=crop",
+  bikeHarley: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=600&auto=format&fit=crop",
+  bikeKTM: "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?q=80&w=600&auto=format&fit=crop",
+  rider: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=600&auto=format&fit=crop",
+};
 
-type P = {
-  key: string; name: string; partNumber: string; cat: string; retailer: string;
-  price: number; mrp: number; stock: number; desc: string; vehicles: string[];
-  grad: [string, string, string]; emoji: string;
+// gallery per category: [primary, alt, workshop]
+const CAT_GALLERY: Record<string, string[]> = {
+  chains: [IMG.beltPulley, IMG.engineBW, IMG.wrench],
+  sprockets: [IMG.engineBW, IMG.beltPulley, IMG.inspect],
+  "clutch-gearbox": [IMG.engineBW, IMG.wrench, IMG.garage],
+  "drive-belts": [IMG.beltPulley, IMG.engineBW, IMG.wrench],
+  brakes: [IMG.wheelWrench, IMG.wheelBalance, IMG.inspect],
+  "engine-oils": [IMG.oilPour, IMG.inspect, IMG.spanner],
+  "filters-service": [IMG.spanner, IMG.garage, IMG.wrench],
+  electrical: [IMG.dashboard, IMG.speedo, IMG.inspect],
 };
 
 // ---------------- data ----------------
 const CATEGORIES = [
-  { slug: "chain-sprocket-kits", name: "Chain & Sprocket Kits", nameHi: "चेन और स्प्रॉकेट किट", nameGu: "ચેન અને સ્પ્રોકેટ કીટ", icon: "link", gradient: "from-amber-400 to-yellow-300" },
-  { slug: "gearbox-parts", name: "Gearbox Parts", nameHi: "गियरबॉक्स पार्ट्स", nameGu: "ગિયરબોક્સ પાર્ટ્સ", icon: "cog", gradient: "from-yellow-300 to-amber-100" },
-  { slug: "drive-belts", name: "Drive Belts", nameHi: "ड्राइव बेल्ट", nameGu: "ડ્રાઇવ બેલ્ટ", icon: "circle-dot", gradient: "from-amber-300 to-yellow-200" },
-  { slug: "brake-parts", name: "Brake Parts", nameHi: "ब्रेक पार्ट्स", nameGu: "બ્રેક પાર્ટ્સ", icon: "disc-3", gradient: "from-yellow-200 to-amber-300" },
-  { slug: "clutch-plates", name: "Clutch Plates", nameHi: "क्लच प्लेट", nameGu: "ક્લચ પ્લેટ", icon: "disc", gradient: "from-amber-200 to-yellow-300" },
-  { slug: "filters-oils", name: "Filters & Oils", nameHi: "फ़िल्टर और तेल", nameGu: "ફિલ્ટર અને તેલ", icon: "filter", gradient: "from-yellow-300 to-amber-100" },
-  { slug: "electrical", name: "Electrical", nameHi: "इलेक्ट्रिकल", nameGu: "ઇલેક્ટ્રિકલ", icon: "zap", gradient: "from-amber-100 to-yellow-300" },
-  { slug: "body-mirrors", name: "Body & Mirrors", nameHi: "बॉडी और मिरर", nameGu: "બોડી અને મિરર", icon: "car-front", gradient: "from-yellow-200 to-amber-100" },
+  { slug: "chains", name: "Chains", nameHi: "चेन", nameGu: "ચેઇન", icon: "link", imageUrl: CAT_GALLERY.chains[0] },
+  { slug: "sprockets", name: "Sprockets", nameHi: "स्प्रॉकेट", nameGu: "સ્પ્રોકેટ", icon: "cog", imageUrl: CAT_GALLERY.sprockets[0] },
+  { slug: "clutch-gearbox", name: "Clutch & Gearbox", nameHi: "क्लच और गियरबॉक्स", nameGu: "ક્લચ અને ગિયરબોક્સ", icon: "disc", imageUrl: CAT_GALLERY["clutch-gearbox"][0] },
+  { slug: "drive-belts", name: "Drive Belts", nameHi: "ड्राइव बेल्ट", nameGu: "ડ્રાઇવ બેલ્ટ", icon: "circle-dot", imageUrl: CAT_GALLERY["drive-belts"][0] },
+  { slug: "brakes", name: "Brakes", nameHi: "ब्रेक", nameGu: "બ્રેક", icon: "disc-3", imageUrl: CAT_GALLERY.brakes[0] },
+  { slug: "engine-oils", name: "Engine Oil & Lubricants", nameHi: "इंजन ऑयल और लुब्रिकेंट", nameGu: "એન્જિન ઓઈલ અને લ્યુબ્રિકન્ટ", icon: "zap", imageUrl: CAT_GALLERY["engine-oils"][0] },
+  { slug: "filters-service", name: "Filters & Service Kits", nameHi: "फ़िल्टर और सर्विस किट", nameGu: "ફિલ્ટર અને સર્વિસ કીટ", icon: "filter", imageUrl: CAT_GALLERY["filters-service"][0] },
+  { slug: "electrical", name: "Electrical & Batteries", nameHi: "इलेक्ट्रिकल और बैटरी", nameGu: "ઇલેક્ટ્રિકલ અને બેટરી", icon: "car-front", imageUrl: CAT_GALLERY.electrical[0] },
 ];
+
+// legacy categories retired by the Flipkart redesign
+const RETIRED_CATEGORIES = ["chain-sprocket-kits", "gearbox-parts", "brake-parts", "clutch-plates", "filters-oils", "body-mirrors"];
 
 const VEHICLES = [
   { key: "hero-splendor-plus", type: "BIKE", brand: "Hero", model: "Splendor Plus" },
@@ -46,81 +66,96 @@ const VEHICLES = [
 ];
 
 const RETAILERS = [
-  { phone: "9876543210", businessName: "Shree Auto Spares", ownerName: "Ramesh Patel", city: "Ahmedabad", status: "APPROVED", slugs: "chain-sprocket-kits,brake-parts,clutch-plates,filters-oils" },
-  { phone: "9876543211", businessName: "Krishna Motors", ownerName: "Suresh Kumar", city: "Jaipur", status: "APPROVED", slugs: "gearbox-parts,drive-belts,electrical,body-mirrors" },
-  { phone: "9876543212", businessName: "Raj Auto Works", ownerName: "Vikram Singh", city: "Ludhiana", status: "APPROVED", slugs: "chain-sprocket-kits,brake-parts,electrical,filters-oils,body-mirrors" },
-  { phone: "9876500000", businessName: "Modi Spare House", ownerName: "Jayesh Modi", city: "Surat", status: "PENDING", slugs: "clutch-plates,filters-oils" },
+  { phone: "9876543210", businessName: "Shree Auto Parts", ownerName: "Ramesh Patel", city: "Ahmedabad", status: "APPROVED", slugs: "chains,sprockets,brakes,clutch-gearbox" },
+  { phone: "9876543211", businessName: "Rajiv Motors", ownerName: "Suresh Kumar", city: "Jaipur", status: "APPROVED", slugs: "clutch-gearbox,drive-belts,electrical,engine-oils" },
+  { phone: "9876543212", businessName: "Sai Spare House", ownerName: "Vikram Singh", city: "Ludhiana", status: "APPROVED", slugs: "chains,sprockets,brakes,filters-service,electrical" },
+  { phone: "9876500000", businessName: "Patel Chain House", ownerName: "Jayesh Modi", city: "Surat", status: "PENDING", slugs: "clutch-gearbox,filters-service" },
 ];
 
-// 38 products across 8 categories; each mapped to 2-4 vehicles
+type P = {
+  key: string; name: string; partNumber: string; cat: string; retailer: string;
+  price: number; mrp: number; stock: number; desc: string; vehicles: string[];
+};
+
+// 39 products — Chains 6 · Sprockets 5 · Clutch & Gearbox 5 · Drive Belts 4 · Brakes 5 · Engine Oil 5 · Filters 4 · Electrical 5
 const PRODUCTS: P[] = [
-  // --- Chain & Sprocket Kits (6) — Shree Auto Spares ---
-  { key: "p-chain-kit-splendor", name: "Chain Sprocket Kit — Hero Splendor", partNumber: "CSK-SP-101", cat: "chain-sprocket-kits", retailer: "9876543210", price: 1299, mrp: 1899, stock: 24, desc: "Premium 428H chain with hardened sprocket set for Hero Splendor Plus. Heat-treated steel for 2x longer life. Kit includes chain, front sprocket, rear sprocket and connecting clip.", vehicles: ["hero-splendor-plus"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "⛓️" },
-  { key: "p-chain-kit-pulsar", name: "Chain Sprocket Kit — Bajaj Pulsar 150", partNumber: "CSK-PG-205", cat: "chain-sprocket-kits", retailer: "9876543210", price: 1649, mrp: 2299, stock: 18, desc: "OEM-grade 520 conversion chain and sprocket kit for Pulsar 150. Smooth engagement, reduced noise, includes rivet-type master link.", vehicles: ["bajaj-pulsar-150"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "⛓️" },
-  { key: "p-chain-kit-re350", name: "Chain Sprocket Kit — Royal Enfield Classic 350", partNumber: "CSK-RE-350", cat: "chain-sprocket-kits", retailer: "9876543212", price: 2499, mrp: 3499, stock: 12, desc: "Heavy-duty 530H chain with CNC-machined sprockets for Classic 350. Zinc-coated for corrosion resistance on Indian roads.", vehicles: ["royal-enfield-classic-350"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "⛓️" },
-  { key: "p-rear-sprocket-jupiter", name: "Rear Sprocket 42T — TVS Jupiter", partNumber: "RSP-JP-42", cat: "chain-sprocket-kits", retailer: "9876543212", price: 449, mrp: 649, stock: 30, desc: "Genuine-spec 42-tooth rear sprocket for TVS Jupiter. Cold-forged steel with anti-rust black finish.", vehicles: ["tvs-jupiter"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "⚙️" },
-  { key: "p-chain-lubricant", name: "Chain Lubricant Spray 150ml", partNumber: "CLB-150", cat: "chain-sprocket-kits", retailer: "9876543210", price: 249, mrp: 399, stock: 45, desc: "High-tack chain lube that resists fling at high RPM. Suitable for all O-ring and X-ring motorcycle chains.", vehicles: ["hero-splendor-plus", "bajaj-pulsar-150", "royal-enfield-classic-350"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "🧴" },
-  { key: "p-front-sprocket-activa", name: "Front Sprocket 15T — Honda Activa", partNumber: "FSP-AC-15", cat: "chain-sprocket-kits", retailer: "9876543212", price: 329, mrp: 499, stock: 3, desc: "Precision-hobbed 15T front sprocket for Honda Activa series. Case-hardened for extended wear life.", vehicles: ["honda-activa-6g"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "⚙️" },
+  // --- Chains (6) ---
+  { key: "p-chain-kit-splendor", name: "Chain Sprocket Kit — Hero Splendor", partNumber: "CSK-SP-101", cat: "chains", retailer: "9876543210", price: 1299, mrp: 1849, stock: 24, desc: "Premium 428H chain with hardened sprocket set for Hero Splendor Plus. Heat-treated steel for 2x longer life. Kit includes chain, front sprocket, rear sprocket and connecting clip.", vehicles: ["hero-splendor-plus"] },
+  { key: "p-chain-kit-pulsar", name: "Chain Sprocket Kit — Bajaj Pulsar 150", partNumber: "CSK-PG-205", cat: "chains", retailer: "9876543210", price: 1649, mrp: 2299, stock: 18, desc: "OEM-grade 520 conversion chain and sprocket kit for Pulsar 150. Smooth engagement, reduced noise, includes rivet-type master link.", vehicles: ["bajaj-pulsar-150"] },
+  { key: "p-chain-kit-re350", name: "Chain Sprocket Kit — Royal Enfield Classic 350", partNumber: "CSK-RE-350", cat: "chains", retailer: "9876543212", price: 2499, mrp: 3499, stock: 12, desc: "Heavy-duty 530H chain with CNC-machined sprockets for Classic 350. Zinc-coated for corrosion resistance on Indian roads.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-chain-lubricant", name: "Chain Lubricant Spray 150ml", partNumber: "CLB-150", cat: "chains", retailer: "9876543210", price: 249, mrp: 399, stock: 45, desc: "High-tack chain lube that resists fling at high RPM. Suitable for all O-ring and X-ring motorcycle chains.", vehicles: ["hero-splendor-plus", "bajaj-pulsar-150", "royal-enfield-classic-350"] },
+  { key: "p-chain-428-splendor", name: "Heavy Duty Chain 428H — Hero Splendor", partNumber: "CH-428H-SP", cat: "chains", retailer: "9876543212", price: 499, mrp: 699, stock: 30, desc: "428H heavy-duty drive chain with rivet master link for Splendor series. Pre-stretched, low maintenance, 60,000+ km tested.", vehicles: ["hero-splendor-plus"] },
+  { key: "p-chain-oring-pulsar", name: "O-Ring Chain 520 — Bajaj Pulsar 150", partNumber: "CH-520-OR", cat: "chains", retailer: "9876543212", price: 899, mrp: 1299, stock: 16, desc: "520 pitch O-ring chain for Pulsar 150. Sealed O-rings retain grease for smooth, quiet running in dust and rain.", vehicles: ["bajaj-pulsar-150"] },
 
-  // --- Gearbox Parts (5) — Krishna Motors ---
-  { key: "p-gearbox-kit-swift", name: "Gearbox Bearing Kit — Maruti Swift", partNumber: "GBB-SW-01", cat: "gearbox-parts", retailer: "9876543211", price: 2899, mrp: 3999, stock: 8, desc: "Complete gearbox bearing and seal kit for Maruti Swift manual transmission. Japanese-grade NSK equivalent bearings.", vehicles: ["maruti-swift"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "⚙️" },
-  { key: "p-clutch-cable-pulsar", name: "Gear Shift Cable — Bajaj Pulsar 150", partNumber: "GSC-PG-07", cat: "gearbox-parts", retailer: "9876543211", price: 299, mrp: 449, stock: 22, desc: "Smooth-pull gear shift cable with PTFE lining for friction-free shifting on Pulsar 150.", vehicles: ["bajaj-pulsar-150"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "🔧" },
-  { key: "p-gear-lever-splendor", name: "Gear Lever Assembly — Hero Splendor", partNumber: "GLA-SP-03", cat: "gearbox-parts", retailer: "9876543211", price: 349, mrp: 549, stock: 15, desc: "Chrome-plated forged gear lever with anti-slip rubber tip, direct fit for Splendor Plus.", vehicles: ["hero-splendor-plus"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "🔧" },
-  { key: "p-cv-joint-i10", name: "CV Joint Kit — Hyundai Grand i10", partNumber: "CVJ-I10-2", cat: "gearbox-parts", retailer: "9876543211", price: 1999, mrp: 2799, stock: 6, desc: "Complete constant-velocity joint kit with boots, grease and clamps for Grand i10 hatchback.", vehicles: ["hyundai-i10"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "🔩" },
-  { key: "p-gear-oil-re", name: "Gear Oil GL-5 80W-90 — 1L", partNumber: "GO-80W90-1L", cat: "gearbox-parts", retailer: "9876543211", price: 499, mrp: 699, stock: 28, desc: "Extreme-pressure gear oil for gearboxes and differentials. API GL-5 rated, ideal for bullet and cars alike.", vehicles: ["royal-enfield-classic-350", "maruti-swift", "hyundai-i10"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "🛢️" },
+  // --- Sprockets (5) ---
+  { key: "p-rear-sprocket-jupiter", name: "Rear Sprocket 42T — Bajaj Pulsar 150", partNumber: "RSP-PG-42", cat: "sprockets", retailer: "9876543211", price: 549, mrp: 799, stock: 28, desc: "Genuine-spec 42-tooth rear sprocket for Pulsar 150. Cold-forged steel with anti-rust black finish and precise tooth profiling.", vehicles: ["bajaj-pulsar-150"] },
+  { key: "p-front-sprocket-activa", name: "Front Sprocket 15T — Hero Splendor Plus", partNumber: "FSP-SP-15", cat: "sprockets", retailer: "9876543212", price: 399, mrp: 599, stock: 3, desc: "Precision-hobbed 15T front sprocket for Splendor Plus. Case-hardened for extended wear life, direct OEM replacement.", vehicles: ["hero-splendor-plus"] },
+  { key: "p-rear-sprocket-re", name: "Rear Sprocket 45T — Royal Enfield Classic 350", partNumber: "RSP-RE-45", cat: "sprockets", retailer: "9876543211", price: 899, mrp: 1299, stock: 20, desc: "45-tooth rear sprocket machined from EN8 steel for Classic 350. Hardened teeth resist wear under heavy torque.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-sprocket-set-re", name: "Sprocket Set Front & Rear — Royal Enfield Classic 350", partNumber: "SSR-RE-2P", cat: "sprockets", retailer: "9876543212", price: 1899, mrp: 2599, stock: 10, desc: "Matched front and rear sprocket pair for Classic 350. CNC-cut, zinc-plated and balanced for smooth chain line.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-rear-sprocket-splendor", name: "Rear Sprocket 45T — Hero Splendor Plus", partNumber: "RSP-SP-45", cat: "sprockets", retailer: "9876543211", price: 499, mrp: 699, stock: 26, desc: "OEM-pattern 45T rear sprocket for Splendor Plus. Induction-hardened teeth with black anti-rust coating.", vehicles: ["hero-splendor-plus"] },
 
-  // --- Drive Belts (4) — Krishna Motors ---
-  { key: "p-drive-belt-activa", name: "Drive Belt — Honda Activa 6G", partNumber: "DB-AC-6G", cat: "drive-belts", retailer: "9876543211", price: 649, mrp: 899, stock: 20, desc: "Aramid-cord CVT drive belt for Activa 6G. Heat-resistant rubber compound prevents cracking and glazing.", vehicles: ["honda-activa-6g"], grad: ["from-yellow-100", "to-amber-100", "via-yellow-50"], emoji: "🔗" },
-  { key: "p-drive-belt-jupiter", name: "Drive Belt — TVS Jupiter", partNumber: "DB-JP-01", cat: "drive-belts", retailer: "9876543211", price: 599, mrp: 849, stock: 25, desc: "OEM-pattern CVT belt for TVS Jupiter with kevlar reinforcement for smooth acceleration.", vehicles: ["tvs-jupiter"], grad: ["from-yellow-100", "to-amber-100", "via-yellow-50"], emoji: "🔗" },
-  { key: "p-fan-belt-swift", name: "Fan Belt (Alternator) — Maruti Swift", partNumber: "FB-SW-A1", cat: "drive-belts", retailer: "9876543211", price: 399, mrp: 599, stock: 14, desc: "EPDM ribbed V-belt for alternator drive on Swift petrol engines. Resists stretching and slipping.", vehicles: ["maruti-swift"], grad: ["from-yellow-100", "to-amber-100", "via-yellow-50"], emoji: "🔗" },
-  { key: "p-timing-belt-i10", name: "Timing Belt Kit — Hyundai Grand i10", partNumber: "TB-I10-K1", cat: "drive-belts", retailer: "9876543211", price: 2399, mrp: 3199, stock: 7, desc: "Timing belt with tensioner and idler pulleys for 1.2L Kappa engine. Interference-engine safe.", vehicles: ["hyundai-i10"], grad: ["from-yellow-100", "to-amber-100", "via-yellow-50"], emoji: "🔗" },
+  // --- Clutch & Gearbox (5) ---
+  { key: "p-clutch-plate-activa", name: "Clutch Plate Set — Honda Activa", partNumber: "CPL-AC-4P", cat: "clutch-gearbox", retailer: "9876543210", price: 749, mrp: 1099, stock: 16, desc: "4-plate cork clutch set for Activa 6G. Fibre plates deliver progressive engagement and judder-free take-off.", vehicles: ["honda-activa-6g"] },
+  { key: "p-clutch-plate-pulsar", name: "Clutch Plate Set — Bajaj Pulsar 150", partNumber: "CPL-PG-5P", cat: "clutch-gearbox", retailer: "9876543210", price: 899, mrp: 1249, stock: 12, desc: "5-plate clutch set with steel drive plates for Pulsar 150. CNC-rolled friction faces for consistent bite.", vehicles: ["bajaj-pulsar-150"] },
+  { key: "p-clutch-cable-re", name: "Clutch Cable — Royal Enfield Classic 350", partNumber: "CCR-RE-01", cat: "clutch-gearbox", retailer: "9876543210", price: 329, mrp: 499, stock: 20, desc: "Heavy-gauge clutch cable with barrel adjuster for Classic 350 UCE and J-series engines. PTFE-lined for light pull.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-clutch-kit-swift", name: "Clutch Kit 3-in-1 — Maruti Swift", partNumber: "CKT-SW-3", cat: "clutch-gearbox", retailer: "9876543210", price: 4299, mrp: 4999, stock: 4, desc: "Complete clutch kit — pressure plate, friction disc and release bearing for Swift 1.2L petrol. OEM-equivalent spec.", vehicles: ["maruti-swift"] },
+  { key: "p-gearbox-kit-swift", name: "Gearbox Bearing Kit — Maruti Swift", partNumber: "GBB-SW-01", cat: "clutch-gearbox", retailer: "9876543211", price: 2899, mrp: 3999, stock: 8, desc: "Complete gearbox bearing and seal kit for Maruti Swift manual transmission. Japanese-grade NSK equivalent bearings.", vehicles: ["maruti-swift"] },
 
-  // --- Brake Parts (6) — Shree Auto Spares / Raj Auto ---
-  { key: "p-brake-pad-pulsar", name: "Brake Pad Set — Bajaj Pulsar 150", partNumber: "BPD-PG-150", cat: "brake-parts", retailer: "9876543210", price: 549, mrp: 799, stock: 32, desc: "Semi-sintered front brake pads for Pulsar 150 disc. Strong bite, low dust, chamfered edges prevent squeal.", vehicles: ["bajaj-pulsar-150"], grad: ["from-amber-50", "to-yellow-100", "via-amber-100"], emoji: "🛑" },
-  { key: "p-brake-shoe-splendor", name: "Brake Shoe Set — Hero Splendor Plus", partNumber: "BSH-SP-01", cat: "brake-parts", retailer: "9876543210", price: 349, mrp: 499, stock: 40, desc: "Asbestos-free brake shoes with high-friction lining for Splendor Plus rear drum.", vehicles: ["hero-splendor-plus"], grad: ["from-amber-50", "to-yellow-100", "via-amber-100"], emoji: "🛑" },
-  { key: "p-brake-pad-creta", name: "Brake Pad Set (Front) — Hyundai Grand i10", partNumber: "BPD-I10-FR", cat: "brake-parts", retailer: "9876543212", price: 1149, mrp: 1599, stock: 10, desc: "Ceramic front brake pads for Grand i10. Quiet braking with extended rotor life.", vehicles: ["hyundai-i10"], grad: ["from-amber-50", "to-yellow-100", "via-amber-100"], emoji: "🛞" },
-  { key: "p-brake-disc-re", name: "Front Brake Disc — Royal Enfield Classic 350", partNumber: "BDC-RE-300", cat: "brake-parts", retailer: "9876543212", price: 2899, mrp: 3899, stock: 5, desc: "300mm stainless-steel floating disc rotor for Classic 350. Laser-cut vents for heat dissipation.", vehicles: ["royal-enfield-classic-350"], grad: ["from-amber-50", "to-yellow-100", "via-amber-100"], emoji: "🛞" },
-  { key: "p-brake-fluid", name: "Brake Fluid DOT-3 — 500ml", partNumber: "BF-DOT3-500", cat: "brake-parts", retailer: "9876543210", price: 199, mrp: 299, stock: 50, desc: "DOT-3 hydraulic brake fluid with high wet boiling point. Suitable for all disc and drum systems.", vehicles: ["bajaj-pulsar-150", "royal-enfield-classic-350", "hyundai-i10", "maruti-swift"], grad: ["from-amber-50", "to-yellow-100", "via-amber-100"], emoji: "🧴" },
-  { key: "p-brake-cable-activa", name: "Brake Cable Set — Honda Activa", partNumber: "BCA-AC-2P", cat: "brake-parts", retailer: "9876543210", price: 279, mrp: 429, stock: 4, desc: "Front and rear brake cable pair with sealed liners for Activa 6G. Corrosion-resistant zinc coating.", vehicles: ["honda-activa-6g"], grad: ["from-amber-50", "to-yellow-100", "via-amber-100"], emoji: "🔧" },
+  // --- Drive Belts (4) ---
+  { key: "p-drive-belt-activa", name: "Drive Belt — Honda Activa 6G", partNumber: "DB-AC-6G", cat: "drive-belts", retailer: "9876543211", price: 649, mrp: 899, stock: 20, desc: "Aramid-cord CVT drive belt for Activa 6G. Heat-resistant rubber compound prevents cracking and glazing.", vehicles: ["honda-activa-6g"] },
+  { key: "p-drive-belt-jupiter", name: "Drive Belt — TVS Jupiter", partNumber: "DB-JP-01", cat: "drive-belts", retailer: "9876543211", price: 599, mrp: 849, stock: 25, desc: "OEM-pattern CVT belt for TVS Jupiter with kevlar reinforcement for smooth acceleration.", vehicles: ["tvs-jupiter"] },
+  { key: "p-fan-belt-swift", name: "Fan Belt (Alternator) — Maruti Swift", partNumber: "FB-SW-A1", cat: "drive-belts", retailer: "9876543211", price: 399, mrp: 599, stock: 14, desc: "EPDM ribbed V-belt for alternator drive on Swift petrol engines. Resists stretching and slipping.", vehicles: ["maruti-swift"] },
+  { key: "p-timing-belt-i10", name: "Timing Belt Kit — Hyundai Grand i10", partNumber: "TB-I10-K1", cat: "drive-belts", retailer: "9876543211", price: 2399, mrp: 3199, stock: 7, desc: "Timing belt with tensioner and idler pulleys for 1.2L Kappa engine. Interference-engine safe.", vehicles: ["hyundai-i10"] },
 
-  // --- Clutch Plates (5) — Shree Auto Spares ---
-  { key: "p-clutch-plate-activa", name: "Clutch Plate Set — Honda Activa", partNumber: "CPL-AC-4P", cat: "clutch-plates", retailer: "9876543210", price: 749, mrp: 1099, stock: 16, desc: "4-plate cork clutch set for Activa 6G. Fibre plates deliver progressive engagement and judder-free take-off.", vehicles: ["honda-activa-6g"], grad: ["from-amber-50", "to-yellow-100", "via-amber-50"], emoji: "🔩" },
-  { key: "p-clutch-plate-pulsar", name: "Clutch Plate Set — Bajaj Pulsar 150", partNumber: "CPL-PG-5P", cat: "clutch-plates", retailer: "9876543210", price: 899, mrp: 1249, stock: 12, desc: "5-plate clutch set with steel drive plates for Pulsar 150. CNC-rolled friction faces for consistent bite.", vehicles: ["bajaj-pulsar-150"], grad: ["from-amber-50", "to-yellow-100", "via-amber-50"], emoji: "🔩" },
-  { key: "p-clutch-bell-jupiter", name: "Clutch Bell Assembly — TVS Jupiter", partNumber: "CBL-JP-01", cat: "clutch-plates", retailer: "9876543212", price: 1099, mrp: 1599, stock: 9, desc: "Centrifugal clutch bell with bearing for Jupiter CVT. Balanced casting prevents vibration at speed.", vehicles: ["tvs-jupiter"], grad: ["from-amber-50", "to-yellow-100", "via-amber-50"], emoji: "🔩" },
-  { key: "p-clutch-cable-re", name: "Clutch Cable — Royal Enfield Classic 350", partNumber: "CCR-RE-01", cat: "clutch-plates", retailer: "9876543210", price: 329, mrp: 499, stock: 20, desc: "Heavy-gauge clutch cable with barrel adjuster for Classic 350 UCE and J-series engines.", vehicles: ["royal-enfield-classic-350"], grad: ["from-amber-50", "to-yellow-100", "via-amber-50"], emoji: "🔧" },
-  { key: "p-clutch-kit-swift", name: "Clutch Kit 3-in-1 — Maruti Swift", partNumber: "CKT-SW-3", cat: "clutch-plates", retailer: "9876543210", price: 4299, mrp: 5799, stock: 4, desc: "Complete clutch kit — pressure plate, friction disc and release bearing for Swift 1.2L petrol.", vehicles: ["maruti-swift"], grad: ["from-amber-50", "to-yellow-100", "via-amber-50"], emoji: "🔩" },
+  // --- Brakes (5) ---
+  { key: "p-brake-pad-pulsar", name: "Brake Pad Set — Bajaj Pulsar 150", partNumber: "BPD-PG-150", cat: "brakes", retailer: "9876543210", price: 549, mrp: 799, stock: 32, desc: "Semi-sintered front brake pads for Pulsar 150 disc. Strong bite, low dust, chamfered edges prevent squeal.", vehicles: ["bajaj-pulsar-150"] },
+  { key: "p-brake-shoe-splendor", name: "Brake Shoe Set — Hero Splendor Plus", partNumber: "BSH-SP-01", cat: "brakes", retailer: "9876543210", price: 349, mrp: 499, stock: 40, desc: "Asbestos-free brake shoes with high-friction lining for Splendor Plus rear drum.", vehicles: ["hero-splendor-plus"] },
+  { key: "p-brake-pad-creta", name: "Brake Pad Set (Front) — Hyundai Grand i10", partNumber: "BPD-I10-FR", cat: "brakes", retailer: "9876543212", price: 1149, mrp: 1599, stock: 10, desc: "Ceramic front brake pads for Grand i10. Quiet braking with extended rotor life.", vehicles: ["hyundai-i10"] },
+  { key: "p-brake-disc-re", name: "Front Brake Disc — Royal Enfield Classic 350", partNumber: "BDC-RE-300", cat: "brakes", retailer: "9876543212", price: 2899, mrp: 3899, stock: 5, desc: "300mm stainless-steel floating disc rotor for Classic 350. Laser-cut vents for heat dissipation.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-brake-fluid", name: "Brake Fluid DOT-3 — 500ml", partNumber: "BF-DOT3-500", cat: "brakes", retailer: "9876543210", price: 199, mrp: 299, stock: 50, desc: "DOT-3 hydraulic brake fluid with high wet boiling point. Suitable for all disc and drum systems.", vehicles: ["bajaj-pulsar-150", "royal-enfield-classic-350", "hyundai-i10", "maruti-swift"] },
 
-  // --- Filters & Oils (6) — Shree / Raj ---
-  { key: "p-air-filter-re", name: "Air Filter — Royal Enfield Classic 350", partNumber: "AFR-RE-350", cat: "filters-oils", retailer: "9876543210", price: 449, mrp: 649, stock: 35, desc: "Pleated paper element with rubber seal for Classic 350. Filters 99% of dust particles down to 5 microns.", vehicles: ["royal-enfield-classic-350"], grad: ["from-yellow-100", "to-amber-200", "via-yellow-50"], emoji: "🌀" },
-  { key: "p-oil-filter-splendor", name: "Oil Filter — Hero Splendor Plus", partNumber: "OFL-SP-01", cat: "filters-oils", retailer: "9876543210", price: 199, mrp: 299, stock: 48, desc: "Spin-on oil filter with anti-drainback valve for Splendor Plus. Change every 5000 km.", vehicles: ["hero-splendor-plus"], grad: ["from-yellow-100", "to-amber-200", "via-yellow-50"], emoji: "🌀" },
-  { key: "p-engine-oil-10w40", name: "Engine Oil 10W-40 Semi Synthetic — 1L", partNumber: "EO-10W40-1L", cat: "filters-oils", retailer: "9876543212", price: 449, mrp: 649, stock: 60, desc: "JASO MA2 rated semi-synthetic engine oil for bikes and scooters. Smooth cold starts, cooler running.", vehicles: ["hero-splendor-plus", "bajaj-pulsar-150", "honda-activa-6g", "tvs-jupiter", "royal-enfield-classic-350"], grad: ["from-yellow-100", "to-amber-200", "via-yellow-50"], emoji: "🛢️" },
-  { key: "p-ac-filter-swift", name: "AC Cabin Filter — Maruti Swift", partNumber: "ACF-SW-01", cat: "filters-oils", retailer: "9876543212", price: 549, mrp: 799, stock: 18, desc: "Activated-carbon cabin filter for Swift. Blocks PM2.5, dust and pollen for clean cabin air.", vehicles: ["maruti-swift"], grad: ["from-yellow-100", "to-amber-200", "via-yellow-50"], emoji: "🌀" },
-  { key: "p-oil-filter-i10", name: "Oil Filter — Hyundai Grand i10", partNumber: "OFL-I10-01", cat: "filters-oils", retailer: "9876543212", price: 299, mrp: 449, stock: 22, desc: "Cartridge-type oil filter for Kappa 1.1/1.2 engines. High-bypass valve protects at cold start.", vehicles: ["hyundai-i10"], grad: ["from-yellow-100", "to-amber-200", "via-yellow-50"], emoji: "🌀" },
-  { key: "p-fuel-filter-pulsar", name: "Fuel Filter — Bajaj Pulsar 150", partNumber: "FFL-PG-01", cat: "filters-oils", retailer: "9876543210", price: 179, mrp: 279, stock: 38, desc: "Inline fuel filter with 10-micron element, protects carburettor and injectors from rust particles.", vehicles: ["bajaj-pulsar-150"], grad: ["from-yellow-100", "to-amber-200", "via-yellow-50"], emoji: "🌀" },
+  // --- Engine Oil & Lubricants (5) ---
+  { key: "p-engine-oil-10w40", name: "Engine Oil 10W-40 Semi Synthetic — 1L", partNumber: "EO-10W40-1L", cat: "engine-oils", retailer: "9876543212", price: 449, mrp: 649, stock: 60, desc: "JASO MA2 rated semi-synthetic engine oil for bikes and scooters. Smooth cold starts, cooler running.", vehicles: ["hero-splendor-plus", "bajaj-pulsar-150", "honda-activa-6g", "tvs-jupiter", "royal-enfield-classic-350"] },
+  { key: "p-gear-oil-re", name: "Gear Oil GL-5 80W-90 — 1L", partNumber: "GO-80W90-1L", cat: "engine-oils", retailer: "9876543211", price: 499, mrp: 699, stock: 28, desc: "Extreme-pressure gear oil for gearboxes and differentials. API GL-5 rated, ideal for bullets and cars alike.", vehicles: ["royal-enfield-classic-350", "maruti-swift", "hyundai-i10"] },
+  { key: "p-engine-oil-20w40", name: "Engine Oil 20W-40 Mineral — 1.2L", partNumber: "EO-20W40-1.2", cat: "engine-oils", retailer: "9876543210", price: 299, mrp: 449, stock: 50, desc: "Premium mineral engine oil for daily-commute motorcycles. JASO MA2, suits Splendor and CD110 series.", vehicles: ["hero-splendor-plus", "honda-activa-6g"] },
+  { key: "p-scooter-oil-10w30", name: "Scooter Engine Oil 10W-30 — 800ml", partNumber: "EO-10W30-SC", cat: "engine-oils", retailer: "9876543212", price: 379, mrp: 549, stock: 34, desc: "Low-friction scooter oil formulated for CVT gearboxes and wet clutches. Keeps Activa and Jupiter engines quiet.", vehicles: ["honda-activa-6g", "tvs-jupiter"] },
+  { key: "p-coolant-swift", name: "Long Life Coolant 1:3 — 1L", partNumber: "CLT-LL-1L", cat: "engine-oils", retailer: "9876543211", price: 399, mrp: 549, stock: 22, desc: "Silicate-free long-life coolant concentrate for Swift and i10 radiators. Anti-corrosion, 3-year service life.", vehicles: ["maruti-swift", "hyundai-i10"] },
 
-  // --- Electrical (4) — Krishna Motors ---
-  { key: "p-battery-activa", name: "Battery 12V 5Ah — Honda Activa", partNumber: "BAT-AC-5AH", cat: "electrical", retailer: "9876543211", price: 1499, mrp: 2099, stock: 11, desc: "Maintenance-free VRLA battery for Activa 6G with 24-month warranty. Sealed calcium plates, no topping up.", vehicles: ["honda-activa-6g"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "🔋" },
-  { key: "p-headlamp-re", name: "LED Headlamp Unit — Royal Enfield Classic", partNumber: "HLD-RE-LED", cat: "electrical", retailer: "9876543211", price: 2499, mrp: 3499, stock: 6, desc: "Plug-and-play LED headlamp with projector optics and DRL ring for Classic 350. 4000 lumens, IP67.", vehicles: ["royal-enfield-classic-350"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "💡" },
-  { key: "p-spark-plug-pulsar", name: "Spark Plug Iridium — Bajaj Pulsar 150", partNumber: "SPK-PG-IR", cat: "electrical", retailer: "9876543211", price: 349, mrp: 499, stock: 44, desc: "Iridium-tipped spark plug for Pulsar 150. Better cold start, smoother idle, 1.4x service life.", vehicles: ["bajaj-pulsar-150", "hero-splendor-plus"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "⚡" },
-  { key: "p-horn-swift", name: "Dual Horn Set 12V — Maruti Swift", partNumber: "HRN-SW-D2", cat: "electrical", retailer: "9876543211", price: 599, mrp: 899, stock: 3, desc: "Wind-tone twin horn set with relay harness for Swift. 118 dB combined output, copper coil.", vehicles: ["maruti-swift"], grad: ["from-amber-100", "to-yellow-200", "via-amber-50"], emoji: "📢" },
+  // --- Filters & Service Kits (4) ---
+  { key: "p-air-filter-re", name: "Air Filter — Royal Enfield Classic 350", partNumber: "AFR-RE-350", cat: "filters-service", retailer: "9876543210", price: 449, mrp: 649, stock: 35, desc: "Pleated paper element with rubber seal for Classic 350. Filters 99% of dust particles down to 5 microns.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-oil-filter-splendor", name: "Oil Filter — Hero Splendor Plus", partNumber: "OFL-SP-01", cat: "filters-service", retailer: "9876543210", price: 199, mrp: 299, stock: 48, desc: "Spin-on oil filter with anti-drainback valve for Splendor Plus. Change every 5000 km.", vehicles: ["hero-splendor-plus"] },
+  { key: "p-ac-filter-swift", name: "AC Cabin Filter — Maruti Swift", partNumber: "ACF-SW-01", cat: "filters-service", retailer: "9876543212", price: 549, mrp: 799, stock: 18, desc: "Activated-carbon cabin filter for Swift. Blocks PM2.5, dust and pollen for clean cabin air.", vehicles: ["maruti-swift"] },
+  { key: "p-oil-filter-i10", name: "Oil Filter — Hyundai Grand i10", partNumber: "OFL-I10-01", cat: "filters-service", retailer: "9876543212", price: 299, mrp: 449, stock: 22, desc: "Cartridge-type oil filter for Kappa 1.1/1.2 engines. High-bypass valve protects at cold start.", vehicles: ["hyundai-i10"] },
 
-  // --- Body & Mirrors (4) — Krishna / Raj ---
-  { key: "p-mirror-splendor", name: "Rear View Mirror Pair — Hero Splendor", partNumber: "MIR-SP-2P", cat: "body-mirrors", retailer: "9876543211", price: 299, mrp: 449, stock: 26, desc: "OEM-style mirror pair with wide-angle convex glass and anti-vibration stems for Splendor.", vehicles: ["hero-splendor-plus"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "🪞" },
-  { key: "p-visor-activa", name: "Front Visor — Honda Activa 6G", partNumber: "VSR-AC-6G", cat: "body-mirrors", retailer: "9876543211", price: 449, mrp: 699, stock: 13, desc: "Smoke-tinted ABS front visor for Activa 6G. Scratch-resistant coating, push-fit mounting.", vehicles: ["honda-activa-6g"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "🪞" },
-  { key: "p-side-panel-pulsar", name: "Side Panel Set — Bajaj Pulsar 150", partNumber: "SDP-PG-2P", cat: "body-mirrors", retailer: "9876543212", price: 899, mrp: 1299, stock: 8, desc: "Left-right side panel pair in factory-match black for Pulsar 150. Flexible ABS resists cracks.", vehicles: ["bajaj-pulsar-150"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "🛠️" },
-  { key: "p-mudguard-jupiter", name: "Front Mudguard — TVS Jupiter", partNumber: "MGF-JP-01", cat: "body-mirrors", retailer: "9876543212", price: 549, mrp: 799, stock: 10, desc: "Powder-coated steel front mudguard for Jupiter. Factory hole alignment, no cutting needed.", vehicles: ["tvs-jupiter"], grad: ["from-yellow-50", "to-amber-100", "via-yellow-100"], emoji: "🛠️" },
+  // --- Electrical & Batteries (5) ---
+  { key: "p-battery-activa", name: "Battery 12V 5Ah — Honda Activa", partNumber: "BAT-AC-5AH", cat: "electrical", retailer: "9876543211", price: 1499, mrp: 2099, stock: 11, desc: "Maintenance-free VRLA battery for Activa 6G with 24-month warranty. Sealed calcium plates, no topping up.", vehicles: ["honda-activa-6g"] },
+  { key: "p-headlamp-re", name: "LED Headlamp Unit — Royal Enfield Classic", partNumber: "HLD-RE-LED", cat: "electrical", retailer: "9876543211", price: 2499, mrp: 3499, stock: 6, desc: "Plug-and-play LED headlamp with projector optics and DRL ring for Classic 350. 4000 lumens, IP67.", vehicles: ["royal-enfield-classic-350"] },
+  { key: "p-spark-plug-pulsar", name: "Spark Plug Iridium — Bajaj Pulsar 150", partNumber: "SPK-PG-IR", cat: "electrical", retailer: "9876543211", price: 349, mrp: 499, stock: 44, desc: "Iridium-tipped spark plug for Pulsar 150. Better cold start, smoother idle, 1.4x service life.", vehicles: ["bajaj-pulsar-150", "hero-splendor-plus"] },
+  { key: "p-horn-swift", name: "Dual Horn Set 12V — Maruti Swift", partNumber: "HRN-SW-D2", cat: "electrical", retailer: "9876543211", price: 599, mrp: 899, stock: 3, desc: "Wind-tone twin horn set with relay harness for Swift. 118 dB combined output, copper coil.", vehicles: ["maruti-swift"] },
+  { key: "p-battery-swift", name: "Car Battery 12V 35Ah — Maruti Swift", partNumber: "BAT-SW-35", cat: "electrical", retailer: "9876543212", price: 3999, mrp: 4999, stock: 7, desc: "Zero-maintenance calcium car battery for Swift and i10 petrol. 55-month pro-rata warranty, high cranking amps.", vehicles: ["maruti-swift", "hyundai-i10"] },
+];
+
+// legacy products retired by the Flipkart catalog (not referenced by any seed order)
+const RETIRED_PRODUCTS = [
+  "p-clutch-cable-pulsar", "p-gear-lever-splendor", "p-cv-joint-i10", "p-brake-cable-activa",
+  "p-clutch-bell-jupiter", "p-fuel-filter-pulsar", "p-mirror-splendor", "p-visor-activa",
+  "p-side-panel-pulsar", "p-mudguard-jupiter",
 ];
 
 // ---------------- main ----------------
 async function main() {
-  console.log("🌱 Seeding PartKart (additive, upsert by stable keys)…");
+  console.log("🌱 Seeding PartKart v2 (Flipkart catalog, additive, upsert by stable keys)…");
+
+  // 0. retire legacy categories & products from v1 catalog
+  await db.category.updateMany({ where: { slug: { in: RETIRED_CATEGORIES } }, data: { active: false } });
+  await db.product.updateMany({ where: { key: { in: RETIRED_PRODUCTS } }, data: { active: false } });
 
   // 1. Categories
   for (const [i, c] of CATEGORIES.entries()) {
     await db.category.upsert({
       where: { slug: c.slug },
       create: { ...c, sortOrder: i },
-      update: { name: c.name, nameHi: c.nameHi, nameGu: c.nameGu, icon: c.icon, gradient: c.gradient, sortOrder: i },
+      update: { name: c.name, nameHi: c.nameHi, nameGu: c.nameGu, icon: c.icon, imageUrl: c.imageUrl, active: true, sortOrder: i },
     });
   }
 
@@ -129,7 +164,7 @@ async function main() {
     await db.vehicle.upsert({ where: { key: v.key }, create: v, update: { type: v.type, brand: v.brand, model: v.model } });
   }
 
-  // 3. Users (admin / customer / retailer logins)
+  // 3. Users
   const usersData = [
     { phone: "9999999999", name: "PartKart Admin", role: "ADMIN" },
     { phone: "9000000001", name: "Aarav Shah", role: "CUSTOMER" },
@@ -159,29 +194,27 @@ async function main() {
   const productByKey: Record<string, { id: string; retailerId: string; price: number; name: string; images: string }> = {};
   for (const p of PRODUCTS) {
     const slug = p.key.replace("p-", "");
-    const images = JSON.stringify([img3(p.grad.join(" "), p.emoji)]);
+    const gallery = CAT_GALLERY[p.cat] ?? [IMG.engineBW];
+    const images = JSON.stringify(gallery.map((url) => ({ url })));
+    const catId = (await db.category.findUnique({ where: { slug: p.cat } }))!.id;
     const rec = await db.product.upsert({
       where: { key: p.key },
       create: {
         key: p.key, slug, name: p.name, partNumber: p.partNumber, description: p.desc,
-        categoryId: (await db.category.findUnique({ where: { slug: p.cat } }))!.id,
-        retailerId: retailerIds[p.retailer],
-        price: p.price, mrp: p.mrp, stock: p.stock, images: JSON.stringify([{ g: p.grad.join(" "), e: p.emoji }]),
+        categoryId: catId, retailerId: retailerIds[p.retailer],
+        price: p.price, mrp: p.mrp, stock: p.stock, images,
       },
       update: {
-        name: p.name, partNumber: p.partNumber, description: p.desc,
-        price: p.price, mrp: p.mrp, stock: p.stock,
-        images: JSON.stringify([{ g: p.grad.join(" "), e: p.emoji }]),
+        name: p.name, partNumber: p.partNumber, description: p.desc, categoryId: catId,
+        price: p.price, mrp: p.mrp, stock: p.stock, images, active: true,
       },
     });
     productByKey[p.key] = { id: rec.id, retailerId: retailerIds[p.retailer], price: p.price, name: p.name, images };
-    for (const vk of p.vehicles) {
-      await db.productVehicle.upsert({
-        where: { productId_vehicleId: { productId: rec.id, vehicleId: vehicleByKey[vk] } },
-        create: { productId: rec.id, vehicleId: vehicleByKey[vk] },
-        update: {},
-      });
-    }
+    // re-link vehicles deterministically on every run (idempotent)
+    await db.productVehicle.deleteMany({ where: { productId: rec.id } });
+    await db.productVehicle.createMany({
+      data: p.vehicles.map((vk) => ({ productId: rec.id, vehicleId: vehicleByKey[vk] })),
+    });
   }
 
   // 6. Customer address (only if user has none)
@@ -211,15 +244,15 @@ async function main() {
   };
 
   for (const o of ORDERS) {
+    const exists = await db.order.findUnique({ where: { code: o.code } });
+    if (exists) continue; // keep existing state on re-run — do not reset demo progress
     const items = o.items.map(([key, qty]) => ({ p: productByKey[key], qty }));
     const itemsTotal = items.reduce((s, it) => s + it.p.price * it.qty, 0);
     const deliveryFee = itemsTotal >= 999 ? 0 : 49;
     const discount = o.coupon === "DEMO10" ? Math.round(itemsTotal * 0.1) : 0;
     const total = itemsTotal + deliveryFee - discount;
-
-    await db.order.upsert({
-      where: { code: o.code },
-      create: {
+    await db.order.create({
+      data: {
         code: o.code, userId: customer!.id, addressJson: mkAddress,
         itemsTotal, deliveryFee, discount, couponCode: o.coupon, total,
         paymentMethod: o.payment, paymentStatus: o.payStatus, status: o.status,
@@ -237,7 +270,6 @@ async function main() {
           })),
         },
       },
-      update: {}, // keep existing state on re-run — do not reset demo progress
     });
   }
 
@@ -258,8 +290,10 @@ async function main() {
     db.category.count(), db.vehicle.count(), db.product.count(), db.retailer.count(),
     db.user.count(), db.order.count(), db.address.count(), db.notification.count(), db.productVehicle.count(),
   ]);
+  const activeProducts = await db.product.count({ where: { active: true } });
+  const activeCats = await db.category.count({ where: { active: true } });
   console.log("✅ Seed complete. Row counts:");
-  console.log(JSON.stringify({ categories: catC, vehicles: vehC, products: prodC, productVehicleLinks: pvC, retailers: retC, users: userC, orders: ordC, addresses: addrC, notifications: notC }, null, 2));
+  console.log(JSON.stringify({ categories: catC, activeCategories: activeCats, vehicles: vehC, products: prodC, activeProducts, productVehicleLinks: pvC, retailers: retC, users: userC, orders: ordC, addresses: addrC, notifications: notC }, null, 2));
   console.log("Demo accounts → Admin: 9999999999 | Retailer (approved): 9876543210 | Retailer (pending): 9876500000 | Customer: 9000000001 | OTP: 1234");
 }
 

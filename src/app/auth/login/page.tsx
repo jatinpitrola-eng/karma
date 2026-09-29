@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Wrench, ArrowLeft, KeyRound } from "lucide-react";
+import { Zap, ArrowLeft, KeyRound } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useSession } from "@/lib/store";
 import { Button } from "@/components/ui/button";
@@ -68,13 +68,13 @@ function LoginInner() {
 
   return (
     <div className="mx-auto max-w-sm">
-      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+      <div className="rounded-md bg-card p-6 shadow-fk">
         <div className="text-center">
-          <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-primary shadow-pop">
-            <Wrench className="h-8 w-8 text-foreground" />
+          <span className="mx-auto grid h-16 w-16 place-items-center rounded-md bg-fk-blue shadow-fk-lift">
+            <Zap className="h-8 w-8 fill-fk-yellow text-fk-yellow" />
           </span>
-          <h1 className="mt-3 text-lg font-extrabold">{t("auth.welcome")}</h1>
-          <p className="text-xs text-muted-foreground">{t("auth.sub")}</p>
+          <h1 className="mt-3 text-lg font-extrabold text-fk-text">{t("auth.welcome")}</h1>
+          <p className="text-xs text-fk-muted">{t("auth.sub")}</p>
         </div>
 
         {step === "phone" ? (

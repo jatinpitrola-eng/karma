@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="grid min-h-[60vh] place-items-center">
-      <div className="rounded-2xl border bg-card p-8 text-center shadow-soft">
+      <div className="rounded-md bg-card p-8 text-center shadow-fk">
         <p className="text-5xl" aria-hidden>🧭</p>
         <h1 className="mt-3 text-lg font-bold">Page not found</h1>
         <p className="mx-auto mt-2 max-w-xs text-sm text-muted-foreground">
@@ -11,7 +11,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="mt-5 inline-block rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-soft active:scale-95"
+          className="mt-5 inline-block rounded-sm bg-fk-blue px-6 py-2.5 text-sm font-bold text-white shadow-fk active:scale-95"
         >
           Go to Home
         </Link>

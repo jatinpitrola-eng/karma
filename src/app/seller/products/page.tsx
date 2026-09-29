@@ -60,7 +60,7 @@ export default function SellerProductsPage() {
         {products === null ? (
           <Skeleton className="h-64 rounded-xl" />
         ) : products.length === 0 ? (
-          <div className="rounded-xl border bg-card py-14 text-center">
+          <div className="rounded-md bg-card py-14 text-center">
             <p className="text-sm font-semibold">{t("seller.noProducts")}</p>
             <Button className="mt-4" onClick={() => (window.location.href = "/seller/products/new")}>{t("seller.addProduct")}</Button>
           </div>
@@ -69,7 +69,7 @@ export default function SellerProductsPage() {
             {products.map((p) => {
               const img = parseImages(p.images)[0];
               return (
-                <div key={p.id} className="flex items-center gap-3 rounded-xl border bg-card p-3 shadow-soft">
+                <div key={p.id} className="flex items-center gap-3 rounded-md bg-card p-3 shadow-fk">
                   <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-gradient-to-br text-2xl ${img.g}`}>
                     {img.e ?? "🔧"}
                   </span>

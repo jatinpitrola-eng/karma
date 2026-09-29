@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useVehicleStore } from "@/lib/store";
+import { VehicleChipBar } from "@/components/home/vehicle-selector";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -144,6 +145,9 @@ export function CatalogView({
 
   return (
     <div className="space-y-3">
+      {/* active vehicle chip */}
+      <VehicleChipBar />
+
       {/* toolbar: sort + filter */}
       <div className="flex items-center gap-2">
         <p className="flex-1 text-xs text-muted-foreground">{products ? t("cat.productsIn", { n: total }) : ""}</p>
@@ -188,7 +192,7 @@ export function CatalogView({
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div className="grid place-items-center rounded-xl border bg-card py-16 text-center">
+        <div className="grid place-items-center rounded-md bg-card py-16 text-center">
           <SearchX className="mb-3 h-10 w-10 text-muted-foreground/40" />
           <p className="text-sm font-semibold">{t("cat.noResults")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t("cat.noResultsSub")}</p>

@@ -13,7 +13,7 @@ export default function SellerDashboardPage() {
     <SellerGate>
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/15 shadow-soft">
+          <span className="grid h-11 w-11 place-items-center rounded-xl bg-accent shadow-fk">
             <span className="text-lg">🏪</span>
           </span>
           <div>
@@ -37,7 +37,7 @@ export default function SellerDashboardPage() {
           )}
         </div>
 
-        <div className="rounded-xl border bg-card p-4 shadow-soft">
+        <div className="rounded-md bg-card p-4 shadow-fk">
           <h2 className="text-sm font-bold">{t("seller.dashboard")}</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
             {t("seller.productSaved")} — {t("seller.liveBadge")} · {t("product.verifiedSeller")}

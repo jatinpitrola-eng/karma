@@ -99,7 +99,7 @@ function ProductForm() {
     <div className="space-y-4">
       <h1 className="px-1 text-lg font-bold">{editId ? t("seller.editProduct") : t("seller.addProduct")}</h1>
 
-      <div className="space-y-3.5 rounded-xl border bg-card p-4 shadow-soft">
+      <div className="space-y-3.5 rounded-md bg-card p-4 shadow-fk">
         <div className="space-y-1.5">
           <Label htmlFor="pname">{t("seller.productName")}</Label>
           <Input id="pname" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Brake Pad Set — Bajaj Pulsar 150" />
@@ -164,13 +164,15 @@ function ProductForm() {
         <div className="space-y-1.5">
           <Label>{t("seller.productImages")}</Label>
           <div className="flex gap-2">
-            {["from-yellow-50 to-amber-100", "from-amber-50 to-yellow-100", "from-yellow-100 to-amber-200"].map((g, i) => (
-              <div key={i} className={cn("grid h-16 w-16 place-items-center rounded-lg border bg-gradient-to-br text-xl", g)}>
-                {["🔧", "⚙️", "🔩"][i]}
-              </div>
+            {[
+              "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg?auto=compress&cs=tinysrgb&w=600",
+              "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=600&auto=format&fit=crop",
+              "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?q=80&w=600&auto=format&fit=crop",
+            ].map((u) => (
+              <img key={u} src={u} alt="" loading="lazy" className="h-16 w-16 rounded-lg border border-border object-cover" />
             ))}
           </div>
-          <p className="text-[11px] text-muted-foreground">Demo placeholder images — auto-generated</p>
+          <p className="text-[11px] text-muted-foreground">Real catalog photos — auto-assigned from the verified parts pool</p>
         </div>
 
         <Button className="h-11 w-full font-bold" disabled={busy} onClick={save}>

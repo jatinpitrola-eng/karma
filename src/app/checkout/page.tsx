@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -44,6 +44,7 @@ function UpiFlow({
       <DialogContent className="max-w-sm rounded-2xl sm:rounded-2xl">
         <DialogHeader>
           <DialogTitle>{t("checkout.upiTitle")}</DialogTitle>
+          <DialogDescription className="text-xs text-muted-foreground">{t("checkout.demoUpi")}</DialogDescription>
         </DialogHeader>
 
         {step === "input" && (
@@ -64,7 +65,7 @@ function UpiFlow({
 
         {step === "processing" && (
           <div className="grid place-items-center py-10 text-center">
-            <Loader2 className="h-10 w-10 animate-spin text-amber-600" />
+            <Loader2 className="h-10 w-10 animate-spin text-fk-blue" />
             <p className="mt-4 text-sm font-medium">{t("checkout.upiProcessing")}</p>
             <p className="mt-1 text-[11px] text-muted-foreground">{t("checkout.demoUpi")}</p>
           </div>
@@ -176,7 +177,7 @@ function CheckoutInner() {
 
   if (placed) {
     return (
-      <div className="grid place-items-center rounded-xl border bg-card py-16 text-center">
+      <div className="grid place-items-center rounded-md bg-card py-16 text-center">
         <span className="tick-in grid h-20 w-20 place-items-center rounded-full bg-green-100">
           <CheckCircle2 className="h-12 w-12 text-green-600" />
         </span>
@@ -192,7 +193,7 @@ function CheckoutInner() {
 
   if (!me) {
     return (
-      <div className="grid place-items-center rounded-xl border bg-card py-16 text-center">
+      <div className="grid place-items-center rounded-md bg-card py-16 text-center">
         <p className="text-sm font-semibold">{t("checkout.loginRequired")}</p>
         <Button className="mt-4" onClick={() => router.push("/auth/login?next=/checkout")}>{t("account.loginNow")}</Button>
       </div>
@@ -203,7 +204,7 @@ function CheckoutInner() {
 
   if (cart.items.length === 0) {
     return (
-      <div className="grid place-items-center rounded-xl border bg-card py-16 text-center">
+      <div className="grid place-items-center rounded-md bg-card py-16 text-center">
         <p className="text-sm font-semibold">{t("checkout.emptyCart")}</p>
         <Button className="mt-4" onClick={() => router.push("/")}>{t("cart.startShopping")}</Button>
       </div>
@@ -215,9 +216,9 @@ function CheckoutInner() {
       <h1 className="px-1 text-lg font-bold">{t("checkout.title")}</h1>
 
       {/* address */}
-      <section className="rounded-xl border bg-card p-4 shadow-soft">
+      <section className="rounded-md bg-card p-4 shadow-fk">
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-amber-600" />
+          <MapPin className="h-4 w-4 text-fk-blue" />
           <h2 className="flex-1 text-sm font-bold">{t("checkout.deliveryAddress")}</h2>
           {!showForm && (
             <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-semibold text-foreground" onClick={() => setShowForm(true)}>
@@ -271,12 +272,12 @@ function CheckoutInner() {
       </section>
 
       {/* payment */}
-      <section className="rounded-xl border bg-card p-4 shadow-soft">
+      <section className="rounded-md bg-card p-4 shadow-fk">
         <h2 className="text-sm font-bold">{t("checkout.paymentMethod")}</h2>
         <RadioGroup value={payment} onValueChange={(v) => setPayment(v as "COD" | "UPI")} className="mt-3 gap-2.5">
           <label className={cn("flex cursor-pointer items-center gap-3 rounded-lg border p-3.5 transition-colors", payment === "COD" ? "border-primary bg-secondary" : "hover:bg-muted/50")}>
             <RadioGroupItem value="COD" />
-            <Banknote className="h-5 w-5 text-amber-600" />
+            <Banknote className="h-5 w-5 text-fk-blue" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold">{t("checkout.cod")}</span>
               <span className="block text-xs text-muted-foreground">{t("checkout.codDesc")}</span>
@@ -284,7 +285,7 @@ function CheckoutInner() {
           </label>
           <label className={cn("flex cursor-pointer items-center gap-3 rounded-lg border p-3.5 transition-colors", payment === "UPI" ? "border-primary bg-secondary" : "hover:bg-muted/50")}>
             <RadioGroupItem value="UPI" />
-            <Smartphone className="h-5 w-5 text-amber-600" />
+            <Smartphone className="h-5 w-5 text-fk-blue" />
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-bold">{t("checkout.upi")}</span>
               <span className="block text-xs text-muted-foreground">{t("checkout.upiDesc")}</span>
@@ -294,7 +295,7 @@ function CheckoutInner() {
       </section>
 
       {/* summary + place */}
-      <section className="rounded-xl border bg-card p-4 shadow-soft">
+      <section className="rounded-md bg-card p-4 shadow-fk">
         <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">{t("checkout.orderSummary")}</p>
         <div className="mt-2 space-y-1">
           {cart.items.map((i) => (
@@ -326,7 +327,7 @@ function CheckoutInner() {
             <span>{formatINR(total)}</span>
           </div>
         </div>
-        <Button className="mt-3.5 h-11 w-full font-bold" disabled={placing || (!selected && addresses.length === 0)} onClick={placeOrder}>
+        <Button className="mt-3.5 h-11 w-full rounded-sm bg-fk-coral font-bold text-white hover:bg-fk-orange" disabled={placing || (!selected && addresses.length === 0)} onClick={placeOrder}>
           {placing ? t("checkout.placing") : payment === "UPI" ? t("checkout.upi") + " →" : t("checkout.placeOrder")}
         </Button>
         <p className="mt-2.5 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">

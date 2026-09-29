@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, MapPin, Ban } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { formatINR, formatDate, parseImages } from "@/lib/format";
+import { PartImg } from "@/components/product/part-img";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge, OrderTimeline } from "@/components/product/status-badge";
@@ -58,7 +59,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
   if (missing) {
     return (
-      <div className="grid place-items-center rounded-xl border bg-card py-16 text-center">
+      <div className="grid place-items-center rounded-md bg-card py-16 text-center">
         <p className="text-sm font-semibold">{t("product.notFound")}</p>
         <Button className="mt-4" onClick={() => router.push("/orders")}>{t("orders.title")}</Button>
       </div>
@@ -80,15 +81,15 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* items */}
-      <section className="rounded-xl border bg-card p-4 shadow-soft">
+      <section className="rounded-md bg-card p-4 shadow-fk">
         <h2 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{t("orders.items")}</h2>
         <div className="mt-3 space-y-3">
           {order.items.map((it) => {
             const img = parseImages(it.image)[0];
             return (
               <div key={it.id} className="flex items-center gap-3">
-                <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-gradient-to-br text-2xl ${img.g}`}>
-                  {img.e ?? "🔧"}
+                <span className="h-14 w-14 shrink-0 overflow-hidden rounded border border-border/60 bg-white">
+                  <PartImg src={img.url} alt={it.name} className="h-full w-full object-cover" />
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{it.name}</p>
@@ -130,7 +131,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       </section>
 
       {/* timeline */}
-      <section className="rounded-xl border bg-card p-4 shadow-soft">
+      <section className="rounded-md bg-card p-4 shadow-fk">
         <h2 className="mb-3.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">{t("orders.timeline")}</h2>
         <OrderTimeline events={order.events} status={order.status} />
         {order.status !== "CANCELLED" && order.status !== "DELIVERED" && (
@@ -141,7 +142,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       </section>
 
       {/* address */}
-      <section className="rounded-xl border bg-card p-4 shadow-soft">
+      <section className="rounded-md bg-card p-4 shadow-fk">
         <h2 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" /> {t("checkout.deliveryAddress")}
         </h2>

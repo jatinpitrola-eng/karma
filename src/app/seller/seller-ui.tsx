@@ -16,7 +16,7 @@ export function SellerGate({ children }: { children: React.ReactNode }) {
 
   if (!me) {
     return (
-      <div className="mx-auto grid max-w-md place-items-center rounded-xl border bg-card py-16 text-center">
+      <div className="mx-auto grid max-w-md place-items-center rounded-md bg-card py-16 text-center">
         <Store className="mb-3 h-10 w-10 text-muted-foreground/40" />
         <p className="text-sm font-semibold">{t("seller.loginAsRetailer")}</p>
         <Link href="/auth/login?next=/seller" className="mt-4 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground">
@@ -28,7 +28,7 @@ export function SellerGate({ children }: { children: React.ReactNode }) {
 
   if (me.retailer && me.retailer.status === "BLOCKED") {
     return (
-      <div className="mx-auto grid max-w-md place-items-center rounded-xl border bg-card py-16 px-6 text-center">
+      <div className="mx-auto grid max-w-md place-items-center rounded-md bg-card py-16 px-6 text-center">
         <p className="text-3xl">⛔</p>
         <p className="mt-3 text-sm font-semibold">{t("seller.blocked")}</p>
       </div>
@@ -37,9 +37,9 @@ export function SellerGate({ children }: { children: React.ReactNode }) {
 
   if (me.retailer && me.retailer.status === "PENDING") {
     return (
-      <div className="mx-auto max-w-md rounded-xl border bg-card p-8 text-center shadow-soft">
-        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-amber-100">
-          <Clock className="h-8 w-8 text-amber-600 live-dot" />
+      <div className="mx-auto max-w-md rounded-md bg-card p-8 text-center shadow-fk">
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-fk-yellow/50">
+          <Clock className="h-8 w-8 text-fk-blue live-dot" />
         </span>
         <h1 className="mt-4 text-base font-bold">{t("seller.pendingTitle")}</h1>
         <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{t("seller.pendingBody")}</p>
@@ -85,7 +85,7 @@ export function SellerNav() {
       })}
       <Link
         href="/seller/products/new"
-        className="flex shrink-0 items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-xs font-bold text-primary hover:bg-foreground/90"
+        className="flex shrink-0 items-center gap-1.5 rounded-full bg-fk-yellow px-4 py-2 text-xs font-bold text-fk-text hover:bg-fk-yellow/90"
       >
         <Plus className="h-3.5 w-3.5" />
         {t("seller.addProduct")}
@@ -106,10 +106,10 @@ export function StatCard({
   warn?: boolean;
 }) {
   return (
-    <div className={cn("rounded-xl border bg-white p-3.5 shadow-soft", warn && "border-red-200 bg-red-50/60")}>
+    <div className={cn("rounded-md border bg-white p-3.5 shadow-fk", warn && "border-red-200 bg-red-50/60")}>
       <div className="flex items-center gap-2">
         {Icon && (
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary/15 text-amber-600">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-accent text-fk-blue">
             <Icon className="h-3.5 w-3.5" />
           </span>
         )}

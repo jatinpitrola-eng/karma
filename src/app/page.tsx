@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ChevronRight, Store } from "lucide-react";
+import { ChevronRight, Star, Store } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useVehicleStore } from "@/lib/store";
 import { ProductCard, type ProductCardData } from "@/components/product/product-card";
-import { VehicleSelector } from "@/components/home/vehicle-selector";
+import { PartImg } from "@/components/product/part-img";
+import { VehicleSelector, VehicleChipBar } from "@/components/home/vehicle-selector";
 import { HeroCarousel } from "@/components/home/hero-carousel";
 import { CategoryCircles, type Cat } from "@/components/home/category-circles";
 import { CountdownStrip } from "@/components/home/countdown-strip";
@@ -49,36 +50,42 @@ export default function HomePage() {
 
   return (
     <div className="space-y-4">
-      {/* 1. Vehicle selector */}
-      <section aria-label="Vehicle selector">
-        {vehicles ? <VehicleSelector vehicles={vehicles} /> : <Skeleton className="h-[92px] rounded-xl" />}
-      </section>
+      {/* active vehicle chip (under header, Flipkart style) */}
+      <VehicleChipBar />
 
-      {/* 2. Hero carousel */}
-      <section aria-label="Offers">
-        <HeroCarousel />
-      </section>
-
-      {/* 3. Category circles */}
+      {/* 1. Category strip — real photo circles */}
       <section aria-label="Categories">
         {categories ? (
           <CategoryCircles categories={categories} />
         ) : (
-          <Skeleton className="h-28 rounded-xl" />
+          <Skeleton className="h-28 rounded-md" />
         )}
       </section>
 
-      {/* 4. Deals of the Day */}
+      {/* 2. Sale banner carousel */}
+      <section aria-label="Offers">
+        <HeroCarousel />
+      </section>
+
+      {/* 3. Deals of the Day */}
       <section aria-label="Deals of the day">
-        <div className="overflow-hidden rounded-xl border bg-card shadow-soft">
-          <CountdownStrip />
+        <div className="overflow-hidden rounded-md bg-card shadow-fk">
+          <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+            <div className="flex items-center gap-2">
+              <span className="text-base font-extrabold text-fk-text">{t("home.dealsOfDay")}</span>
+              <CountdownStrip />
+            </div>
+            <Link href="/deals" className="flex items-center text-xs font-bold text-fk-blue hover:underline">
+              {t("common.viewAll")} <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
           <div className="flex gap-3 overflow-x-auto p-3 no-scrollbar">
             {deals === null
-              ? Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-56 w-36 shrink-0 rounded-xl" />)
+              ? Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-60 w-40 shrink-0 rounded-md" />)
               : deals.length === 0
-                ? <p className="py-8 text-sm text-muted-foreground">{t("cat.noResults")}</p>
+                ? <p className="py-8 text-sm text-fk-muted">{t("cat.noResults")}</p>
                 : deals.map((p) => (
-                    <div key={p.id} className="w-36 shrink-0">
+                    <div key={p.id} className="w-40 shrink-0">
                       <ProductCard p={p} />
                     </div>
                   ))}
@@ -86,17 +93,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 4. Vehicle selector pill */}
+      <section aria-label="Vehicle selector">
+        {vehicles ? <VehicleSelector vehicles={vehicles} /> : <Skeleton className="h-[68px] rounded-md" />}
+      </section>
+
       {/* 5. Trending Parts — 2-col grid */}
       <section aria-label="Trending parts">
         <div className="mb-2.5 flex items-center justify-between px-1">
-          <h2 className="text-base font-bold">{t("home.trending")}</h2>
-          <Link href="/categories" className="flex items-center text-xs font-semibold text-foreground hover:underline">
+          <h2 className="text-base font-bold text-fk-text">{t("home.trending")}</h2>
+          <Link href="/categories" className="flex items-center text-xs font-semibold text-fk-blue hover:underline">
             {t("common.viewAll")} <ChevronRight className="h-3.5 w-3.5" />
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {trending === null
-            ? Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-60 rounded-xl" />)
+            ? Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-60 rounded-md" />)
             : trending.map((p) => <ProductCard key={p.id} p={p} />)}
         </div>
       </section>
@@ -104,24 +116,37 @@ export default function HomePage() {
       {/* 6. Top Retailers strip */}
       <section aria-label="Top retailers">
         <div className="mb-2.5 px-1">
-          <h2 className="text-base font-bold">{t("home.topRetailers")}</h2>
+          <h2 className="text-base font-bold text-fk-text">{t("home.topRetailers")}</h2>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar">
           {retailers === null
-            ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 w-56 shrink-0 rounded-xl" />)
-            : retailers.map((r) => (
+            ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28 w-64 shrink-0 rounded-md" />)
+            : retailers.map((r, i) => (
                 <Link
                   key={r.id}
                   href={`/category/all?retailer=${r.id}`}
-                  className="flex w-56 shrink-0 items-center gap-3 rounded-xl border bg-card p-3.5 shadow-soft transition-shadow hover:shadow-pop"
+                  className="flex w-64 shrink-0 overflow-hidden rounded-md bg-card shadow-fk transition-shadow hover:shadow-fk-lift"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/15 text-amber-600">
-                    <Store className="h-5 w-5" />
+                  <span className="h-full w-20 shrink-0 overflow-hidden bg-fk-bg">
+                    <PartImg
+                      src={i % 2 === 0 ? "https://images.pexels.com/photos/4480505/pexels-photo-4480505.jpeg?auto=compress&cs=tinysrgb&w=600" : "https://images.unsplash.com/photo-1504222490345-c075b6008014?q=80&w=600&auto=format&fit=crop"}
+                      alt={r.businessName}
+                      className="h-full w-full object-cover"
+                    />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-bold">{r.businessName}</span>
-                    <span className="block text-[11px] text-muted-foreground">{r.city}</span>
-                    <span className="mt-0.5 block text-[11px] font-semibold text-green-700">
+                  <span className="min-w-0 flex-1 p-3">
+                    <span className="flex items-center gap-1">
+                      <Store className="h-3.5 w-3.5 shrink-0 text-fk-blue" aria-hidden />
+                      <span className="block truncate text-sm font-bold text-fk-text">{r.businessName}</span>
+                    </span>
+                    <span className="mt-0.5 block text-[11px] text-fk-muted">{r.city}</span>
+                    <span className="mt-1 flex items-center gap-1">
+                      <span className="inline-flex items-center gap-0.5 rounded-sm bg-fk-green px-1 py-0.5 text-[10px] font-bold text-white">
+                        4.4 <Star className="h-2.5 w-2.5 fill-white" aria-hidden />
+                      </span>
+                      <span className="text-[10.5px] text-fk-muted">{t("home.retailerOrders")}</span>
+                    </span>
+                    <span className="mt-0.5 block text-[11px] font-semibold text-fk-green">
                       {t("home.retailerProducts", { n: r.productCount })}
                     </span>
                   </span>

@@ -70,7 +70,7 @@ export default function SellerOrdersPage() {
         {orders === null ? (
           <Skeleton className="h-64 rounded-xl" />
         ) : orders.length === 0 ? (
-          <div className="rounded-xl border bg-card py-14 text-center">
+          <div className="rounded-md bg-card py-14 text-center">
             <p className="text-2xl">📦</p>
             <p className="mt-2 text-sm font-semibold">{t("seller.noOrders")}</p>
           </div>
@@ -79,7 +79,7 @@ export default function SellerOrdersPage() {
             {orders.map((o) => {
               const action = nextAction[o.status];
               return (
-                <div key={o.id} className="rounded-xl border bg-card p-4 shadow-soft">
+                <div key={o.id} className="rounded-md bg-card p-4 shadow-fk">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-bold text-muted-foreground">{o.code}</span>
                     <StatusBadge status={o.status} />

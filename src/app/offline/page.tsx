@@ -5,7 +5,7 @@ export const metadata = { title: "Offline — PartKart" };
 export default function OfflinePage() {
   return (
     <div className="grid min-h-[60vh] place-items-center">
-      <div className="rounded-2xl border bg-card p-8 text-center shadow-soft">
+      <div className="rounded-md bg-card p-8 text-center shadow-fk">
         <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-muted">
           <WifiOff className="h-8 w-8 text-muted-foreground" />
         </span>

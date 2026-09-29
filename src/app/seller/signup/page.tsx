@@ -87,9 +87,9 @@ export default function SellerSignupPage() {
         <ArrowLeft className="h-4 w-4" /> {t("common.back")}
       </button>
 
-      <div className="rounded-2xl border bg-card p-6 shadow-soft">
+      <div className="rounded-md bg-card p-6 shadow-fk">
         <div className="text-center">
-          <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 shadow-pop">
+          <span className="mx-auto grid h-14 w-14 place-items-center rounded-md bg-fk-blue shadow-fk-lift">
             <Store className="h-7 w-7 text-white" />
           </span>
           <h1 className="mt-3 text-lg font-extrabold">{t("seller.becomeSeller")}</h1>

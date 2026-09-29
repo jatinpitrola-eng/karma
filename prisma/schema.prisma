@@ -67,7 +67,8 @@ model Category {
   nameHi    String
   nameGu    String
   icon      String    @default("wrench")
-  gradient  String    @default("from-orange-400 to-red-500")
+  gradient  String    @default("from-blue-400 to-blue-600")
+  imageUrl  String    @default("") // real photo (verified pool)
   sortOrder Int       @default(0)
   active    Boolean   @default(true)
   products  Product[]

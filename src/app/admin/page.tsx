@@ -93,7 +93,7 @@ export default function AdminPage() {
   if (!loading && !isAdmin) {
     return (
       <div className="mx-auto max-w-sm">
-        <div className="rounded-2xl border bg-card p-6 shadow-soft">
+        <div className="rounded-md bg-card p-6 shadow-fk">
           <div className="text-center">
             <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-stone-800 shadow-pop">
               <Shield className="h-8 w-8 text-white" />
@@ -188,7 +188,7 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3 rounded-xl bg-stone-900 p-4 text-white shadow-soft">
+      <div className="flex items-center gap-3 rounded-xl bg-stone-900 p-4 text-white shadow-fk">
         <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10">
           <Shield className="h-6 w-6" />
         </span>
@@ -243,7 +243,7 @@ export default function AdminPage() {
           {retailers === null ? (
             <Skeleton className="h-40 rounded-xl" />
           ) : retailers.filter((r) => r.status === "PENDING").length === 0 ? (
-            <div className="rounded-xl border bg-card py-12 text-center text-sm text-muted-foreground">{t("admin.noPending")}</div>
+            <div className="rounded-md bg-card py-12 text-center text-sm text-muted-foreground">{t("admin.noPending")}</div>
           ) : (
             retailers
               .filter((r) => r.status === "PENDING")
@@ -254,7 +254,7 @@ export default function AdminPage() {
                     {r.ownerName} · +91 {r.phone} · {r.city} · {t("cat.allCategories")}: {r.categorySlugs.split(",").length}
                   </p>
                   <div className="mt-3 flex gap-2">
-                    <Button size="sm" className="h-9 gap-1 bg-primary font-bold text-foreground hover:bg-(--primary-hover)" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
+                    <Button size="sm" className="h-9 gap-1 bg-fk-blue font-bold text-white hover:bg-fk-blue-dark" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
                       <Check className="h-4 w-4" /> {t("admin.approve")}
                     </Button>
                     <Button size="sm" variant="outline" className="h-9 gap-1 border-red-200 font-bold text-red-600 hover:bg-red-50" onClick={() => setRetailerStatus(r.id, "BLOCKED")}>
@@ -274,7 +274,7 @@ export default function AdminPage() {
             <Skeleton className="h-64 rounded-xl" />
           ) : (
             orders.map((o) => (
-              <div key={o.id} className="rounded-xl border bg-card p-3.5 shadow-soft">
+              <div key={o.id} className="rounded-md bg-card p-3.5 shadow-fk">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-xs font-bold">{o.code}</span>
                   <Select value={o.status} onValueChange={(v) => forceStatus(o.id, v)}>
@@ -304,7 +304,7 @@ export default function AdminPage() {
             <Skeleton className="h-64 rounded-xl" />
           ) : (
             products.map((p) => (
-              <div key={p.id} className="flex items-center gap-3 rounded-xl border bg-card p-3 shadow-soft">
+              <div key={p.id} className="flex items-center gap-3 rounded-md bg-card p-3 shadow-fk">
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{p.name}</p>
                   <p className="text-[11px] text-muted-foreground">
@@ -327,7 +327,7 @@ export default function AdminPage() {
             <Skeleton className="h-64 rounded-xl" />
           ) : (
             retailers.map((r) => (
-              <div key={r.id} className="rounded-xl border bg-card p-3.5 shadow-soft">
+              <div key={r.id} className="rounded-md bg-card p-3.5 shadow-fk">
                 <div className="flex items-center justify-between gap-2">
                   <div className="min-w-0">
                     <p className="truncate text-sm font-bold">{r.businessName}</p>
@@ -339,7 +339,7 @@ export default function AdminPage() {
                 </div>
                 <div className="mt-2.5 flex gap-2">
                   {r.status !== "APPROVED" && (
-                    <Button size="sm" className="h-8 gap-1 border-transparent bg-primary text-xs font-bold text-foreground hover:bg-(--primary-hover)" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
+                    <Button size="sm" className="h-8 gap-1 border-transparent bg-fk-blue text-xs font-bold text-white hover:bg-fk-blue-dark" onClick={() => setRetailerStatus(r.id, "APPROVED")}>
                       <Check className="h-3.5 w-3.5" /> {t("admin.approve")}
                     </Button>
                   )}
@@ -357,7 +357,7 @@ export default function AdminPage() {
 
       {/* CUSTOMERS */}
       {tab === "customers" && (
-        <div className="overflow-hidden rounded-xl border bg-card shadow-soft">
+        <div className="overflow-hidden rounded-md bg-card shadow-fk">
           {customers === null ? (
             <Skeleton className="h-40" />
           ) : customers.length === 0 ? (
@@ -386,7 +386,7 @@ export default function AdminPage() {
           {lowStock === null ? (
             <Skeleton className="h-40 rounded-xl" />
           ) : lowStock.length === 0 ? (
-            <div className="rounded-xl border bg-card py-10 text-center text-sm text-muted-foreground">✓ {t("common.ok")}</div>
+            <div className="rounded-md bg-card py-10 text-center text-sm text-muted-foreground">✓ {t("common.ok")}</div>
           ) : (
             lowStock.map((p) => (
               <div key={p.id} className="flex items-center gap-3 rounded-xl border border-red-100 bg-red-50/60 p-3.5">
@@ -409,10 +409,10 @@ export default function AdminPage() {
 
 function Stat({ label, value, icon: Icon, warn }: { label: string; value: string; icon?: typeof Package; warn?: boolean }) {
   return (
-    <div className={cn("rounded-xl border bg-white p-3.5 shadow-soft", warn && "border-red-200 bg-red-50/60")}>
+    <div className={cn("rounded-xl border bg-white p-3.5 shadow-fk", warn && "border-red-200 bg-red-50/60")}>
       <div className="flex items-center gap-2">
         {Icon && (
-          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary/15 text-amber-600">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-accent text-fk-blue">
             <Icon className="h-3.5 w-3.5" />
           </span>
         )}

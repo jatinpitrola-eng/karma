@@ -27,14 +27,15 @@ export function formatDate(iso: string | Date): string {
   return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 }
 
-// Demo images: product.images is JSON: [{ g: "tailwind-gradient-classes", e: "emoji" }]
-export type ProductImage = { g: string; e?: string };
+// Product images: JSON array of specs — v2 real photos {url}, v1 legacy gradients {g,e}
+export type ProductImage = { url?: string; g?: string; e?: string };
+export const PART_PLACEHOLDER = "/images/part-placeholder.svg";
 export function parseImages(images: string): ProductImage[] {
   try {
     const arr = JSON.parse(images);
     if (Array.isArray(arr) && arr.length) return arr as ProductImage[];
   } catch {}
-  return [{ g: "from-yellow-50 to-amber-100", e: "🔧" }];
+  return [{ url: PART_PLACEHOLDER }];
 }
 
 export const ORDER_FLOW = ["PLACED", "CONFIRMED", "PACKED", "SHIPPED", "DELIVERED"] as const;
