@@ -53,8 +53,11 @@ export async function POST(req: NextRequest) {
   // stable key from part number + retailer phone → upsert-safe
   const key = `r-${retailer.phone}-${String(partNumber).toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   const slug = `${String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 48)}-${Date.now().toString(36)}`;
-  // real photo from the category's verified pool (fallback to placeholder)
-  const cat = await db.category.findUnique({ where: { id: categoryId } });
+  // resolve category (accept id OR slug — the seller form sends the slug)
+  const cat = await db.category.findFirst({ where: { OR: [{ id: categoryId }, { slug: categoryId }] } });
+  if (!cat) {
+    return NextResponse.json({ ok: false, error: "INVALID_CATEGORY" }, { status: 400 });
+  }
   const CAT_GALLERY: Record<string, string[]> = {
     chains: ["https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=600&auto=format&fit=crop", "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg?auto=compress&cs=tinysrgb&w=600"],
     sprockets: ["https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg?auto=compress&cs=tinysrgb&w=600"],
@@ -71,7 +74,7 @@ export async function POST(req: NextRequest) {
   const product = await db.product.upsert({
     where: { key },
     create: {
-      key, slug, name, categoryId,
+      key, slug, name, categoryId: cat.id,
       retailerId: retailer.id,
       price: Number(price), mrp: Number(mrp),
       stock: Number(stock ?? 10),
@@ -79,7 +82,7 @@ export async function POST(req: NextRequest) {
       images,
     },
     update: {
-      name, categoryId,
+      name, categoryId: cat.id,
       price: Number(price), mrp: Number(mrp),
       stock: Number(stock ?? 10),
       partNumber, description: description ?? "",

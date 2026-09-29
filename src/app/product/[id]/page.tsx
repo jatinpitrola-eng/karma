@@ -2,7 +2,7 @@
 import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Heart, Star, BadgeCheck, Check, MapPin, Truck, ShieldCheck, ChevronRight, Share2 } from "lucide-react";
+import { Heart, Star, BadgeCheck, Check, MapPin, Truck, ShieldCheck, ChevronRight, Share2, Store } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { formatINR, discountPct, parseImages } from "@/lib/format";
 import { useSession, useVehicleStore } from "@/lib/store";
@@ -250,20 +250,32 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
         </div>
       </section>
 
-      {/* ============ Sold by ============ */}
-      <section className="flex items-center gap-3 rounded-md bg-card p-4 shadow-fk">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent text-fk-blue">
-          <BadgeCheck className="h-5 w-5" aria-hidden />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold text-fk-text">{p.retailer.businessName}</p>
-          <p className="text-[11px] text-fk-muted">
-            <span className="inline-flex items-center gap-0.5 font-bold text-fk-green">4.4 ★</span> · {p.retailer.city}
-          </p>
+      {/* ============ Sold by — Flipkart-style seller card ============ */}
+      <section className="rounded-md bg-card p-4 shadow-fk">
+        <h2 className="text-xs font-bold uppercase tracking-wide text-fk-muted">{t("product.soldBy")}</h2>
+        <div className="mt-2 flex items-center gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-fk-blue">
+            <Store className="h-5 w-5" aria-hidden />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[13px] text-fk-muted">
+              <span>{t("product.soldBy")}:</span>
+              <span className="truncate text-sm font-bold text-fk-text">{p.retailer.businessName}</span>
+              <span className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-semibold text-fk-green">
+                <BadgeCheck className="h-3 w-3" aria-hidden /> {t("product.verifiedSeller")}
+              </span>
+            </p>
+            <p className="mt-1 flex items-center gap-1.5 text-[11px] text-fk-muted">
+              <span className="inline-flex items-center gap-0.5 rounded-sm bg-fk-green px-1 py-0.5 text-[10px] font-bold text-white">
+                4.4 <Star className="h-2 w-2 fill-white" aria-hidden />
+              </span>
+              <span>{p.retailer.city}</span>
+            </p>
+          </div>
+          <Link href={`/category/all?retailer=${p.retailer.id}`} className="flex shrink-0 items-center text-xs font-bold text-fk-blue hover:underline">
+            {t("product.viewStore")} <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
-        <Link href={`/category/all?retailer=${p.retailer.id}`} className="flex items-center text-xs font-bold text-fk-blue hover:underline">
-          {t("product.viewStore")} <ChevronRight className="h-3.5 w-3.5" />
-        </Link>
       </section>
 
       {/* ============ Delivery checker ============ */}

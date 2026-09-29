@@ -24,7 +24,7 @@ type Order = {
   paymentStatus: string;
   createdAt: string;
   address: { name: string; phone: string; pincode: string; line: string; city: string; state?: string };
-  items: { id: string; name: string; image: string; price: number; qty: number }[];
+  items: { id: string; name: string; image: string; price: number; qty: number; storeName?: string | null }[];
   events: { id: string; status: string; createdAt: string }[];
 };
 
@@ -93,6 +93,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{it.name}</p>
+                  {it.storeName && (
+                    <p className="truncate text-[11px] text-muted-foreground">
+                      <span aria-hidden>🛍</span> {it.storeName}
+                    </p>
+                  )}
                   <p className="text-[11px] text-muted-foreground">
                     {t("common.qty")}: {it.qty} × {formatINR(it.price)}
                   </p>

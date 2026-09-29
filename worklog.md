@@ -89,3 +89,24 @@ Stage Summary:
 - Section 12 checklist 16/16 verified with evidence: bg/white cards ✓; glass blur visible w/ -webkit- ×3 ✓; logo ✓; 8 photo circles ✓; 3 auto-slide banners+dots ✓; real photos on every card/page (placeholder fallback armed) ✓; live countdown + VIEW ALL ✓; vehicle 3-step→chip→Fits tags+filter ✓; search suggestions + trending chips ✓; customer OTP→cart→DEMO10(−₹40, save ₹190)→COD ORD-2026-1011→UPI ORD-2026-1012 green tick→timeline+live notifications ✓; pending→admin approve→unlock+notification ✓; /admin secret+approve+low-stock(3) ✓; EN/HI/GU pure incl. banners/toasts ✓; no h-scroll 360&390 (/,/cart,/categories,/checkout,/vehicle,/orders,/product) ✓; PWA manifest/SW/pill ✓ console clean ✓.
 - Demo accounts unchanged: Admin 9999999999 · Retailers 9876543210/9876543211/9876543212 approved, 9876500000 now approved during test, Customer 9000000001 · OTP 1234.
 - Proof: /home/z/my-project/download/proof3/ (f1-f21: home, product full anatomy, cart coupon, COD, timeline, UPI processing/success, vehicle sheet/selected, fits tags, HI, GU, seller dash, confirm, admin, approve, unlocked, search, trending, categories, vehicle page).
+
+---
+Task ID: 4
+Agent: main (Super Z)
+Task: PartKart v2.1 hotfix pass — FIX 1 (bricked build), FIX 2 (seller name visibility), FIX 3 (full regression)
+
+Work Log:
+- FIX 1: seller/products/new/page.tsx imported "../seller-ui" (resolved to nonexistent seller/products/seller-ui) → corrected to "../../seller-ui". npm run build now ✓ (45/45 routes, zero errors); all 14 routes compile including /seller/products/new.
+- FIX 2a: product page "Sold by" section rebuilt as labeled Flipkart card — "SOLD BY" heading + "Sold by: <bold store>" + green Verified Seller badge + 4.4★ pill + city + "View store ›" (Store icon avatar added).
+- FIX 2b: shared ProductCard gained seller line "🛍 <store>" (12px muted, truncate) under price row — one component change propagates to Deals, Trending, Similar Parts, category, search, all surfaces.
+- FIX 2c: found+fixed API 500 on POST /api/retailer/products (P2003 FK violation: seller form sends category SLUG as categoryId; API now resolves id-or-slug via findFirst + 400 INVALID_CATEGORY guard, upsert uses cat.id). E2E proven: new retailer 9111100002 (Sharma Motor Parts, Jaipur) → signup → PENDING gate → admin approve → login → Add Product page loads → save succeeds ("Product saved and live") → product page shows "Sold by: Sharma Motor Parts" + card shows "🛍 Sharma Motor Parts" immediately.
+- FIX 2d: /api/orders/[id] GET now maps OrderItem.retailerId snapshots → retailer storeName per line item; order detail renders "🛍 <store>" under item title.
+- FIX 2e: cart item row + checkout order-summary rows show "🛍 <store>" per line (truncate, no overflow).
+- ₹ polish: admin Revenue stat and seller Revenue stat were bare Intl.NumberFormat → both now formatINR (₹11,686 verified live). rg confirms zero remaining raw Intl.NumberFormat outside format.ts.
+- i18n: reused existing keys product.soldBy/viewStore/verifiedSeller — verified EN/HI/GU all present (विक्रेता / प्रमाणित विक्रेता / स्टोर देखें | વેપારી / પ્રમાણિત વેપારી / સ્ટોર જુઓ). Store names render as proper nouns (untranslated) by design. Hindi product page screenshot verified pure.
+- FIX 3 regression (all pass): build 0 errors; home glass header/photos/banners/countdown/Top Retailers ✓; Sold by card on seeded + new products ✓; seller line on Deals/Trending/category/search/Similar ✓; new-seller E2E ✓; customer OTP→cart DEMO10 (−₹50)→COD ORD-2026-1013 ✓, mock UPI ORD-2026-1014 (VPA→spinner→green tick) ✓; order detail store names + 5-step timeline ✓; tenant isolation proven (Shree 9876543210 does NOT see Sai's orders; Sai 9876543212 sees 1013/1014) ✓; Confirm→customer notification delivered t+1.1s (≤5s req) ✓; admin ₹ + approvals + low stock(3) ✓; EN/HI/GU pure ✓; PWA manifest theme #2874F0/bg #F1F3F6/3 icons + sw v4 + NEVER cache /api/* + install pill ✓; no h-scroll 360px & 390px on /, /product/*, /cart, /checkout, /category/chains ✓; console clean on home/product/seller/admin ✓.
+- Theme untouched per DO NOT: glass header, #2874F0, yellow, photos all preserved.
+
+Stage Summary:
+- App fully unbricked and feature-complete; demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212 approved, 9111100002 Sharma Motor Parts new · Customer 9000000001 · OTP 1234 · /admin unlisted).
+- Proof: /home/z/my-project/download/proof4/ (r1-r28: home, retailers, product, sold-by card, signup, pending, approvals, approved, add-product, saved, new-product card+page, cart+coupon, COD, UPI success, order detail, retailer isolation, admin ₹, Hindi, 360px category).

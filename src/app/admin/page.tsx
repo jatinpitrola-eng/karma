@@ -225,7 +225,7 @@ export default function AdminPage() {
             Array.from({ length: 7 }).map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)
           ) : (
             <>
-              <Stat label={t("admin.revenue")} value={new Intl.NumberFormat("en-IN").format(stats.revenue)} icon={Banknote} />
+              <Stat label={t("admin.revenue")} value={formatINR(stats.revenue)} icon={Banknote} />
               <Stat label={t("admin.orders")} value={String(stats.orders)} icon={ShoppingCart} />
               <Stat label={t("admin.customers")} value={String(stats.customers)} icon={Users} />
               <Stat label={t("admin.products")} value={String(stats.products)} icon={Boxes} />

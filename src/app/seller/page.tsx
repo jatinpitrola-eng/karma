@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Package, ShoppingCart, Banknote, Timer } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { formatINR } from "@/lib/format";
 import { SellerGate, SellerNav, StatCard, useSellerStats } from "./seller-ui";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -31,7 +32,7 @@ export default function SellerDashboardPage() {
             <>
               <StatCard label={t("seller.totalProducts")} value={String(stats.totalProducts)} icon={Package} />
               <StatCard label={t("seller.totalOrders")} value={String(stats.totalOrders)} icon={ShoppingCart} />
-              <StatCard label={t("seller.revenue")} value={new Intl.NumberFormat("en-IN").format(stats.revenue)} icon={Banknote} />
+              <StatCard label={t("seller.revenue")} value={formatINR(stats.revenue)} icon={Banknote} />
               <StatCard label={t("seller.pendingOrders")} value={String(stats.pendingOrders)} icon={Timer} warn={stats.pendingOrders > 0} />
             </>
           )}

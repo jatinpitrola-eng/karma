@@ -150,7 +150,10 @@ export default function CartPage() {
                     <Link href={`/product/${it.product.slug}`} className="line-clamp-2 text-sm font-medium leading-snug text-fk-text hover:text-fk-blue">
                       {it.product.name}
                     </Link>
-                    <p className="mt-0.5 text-[11px] text-fk-muted">{it.product.retailer.businessName}</p>
+                    <p className="mt-0.5 flex items-center gap-1 text-xs text-fk-muted">
+                      <span aria-hidden>🛍</span>
+                      <span className="truncate">{it.product.retailer?.businessName}</span>
+                    </p>
                     {vehicle && (
                       <p className="mt-0.5 text-[11px] font-bold text-fk-green">
                         ✓ {t("product.fitsVehicle", { n: `${vehicle.brand} ${vehicle.model}` })}

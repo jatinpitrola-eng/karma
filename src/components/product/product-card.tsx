@@ -62,6 +62,12 @@ export function ProductCard({ p }: { p: ProductCardData }) {
             </>
           )}
         </div>
+        {p.retailer?.businessName && (
+          <span className="flex items-center gap-1 text-xs text-fk-muted">
+            <span aria-hidden>🛍</span>
+            <span className="truncate">{p.retailer.businessName}</span>
+          </span>
+        )}
         <span className="flex items-center gap-1 text-[10.5px] font-semibold text-fk-muted">
           <BadgeCheck className="h-3 w-3 text-fk-blue" aria-hidden /> {t("product.assured")}
         </span>

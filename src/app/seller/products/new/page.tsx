@@ -2,7 +2,7 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useI18n, localizedCatName, type Lang } from "@/lib/i18n";
-import { SellerGate } from "../seller-ui";
+import { SellerGate } from "../../seller-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

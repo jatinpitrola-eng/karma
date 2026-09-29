@@ -19,6 +19,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   });
   if (!order) return NextResponse.json({ order: null }, { status: 404 });
 
+  // Attach seller store names to each line item (OrderItem keeps retailerId snapshot)
+  const retailerIds = [...new Set(order.items.map((i) => i.retailerId).filter((x): x is string => !!x))];
+  const retailers = retailerIds.length
+    ? await db.retailer.findMany({ where: { id: { in: retailerIds } }, select: { id: true, businessName: true, city: true } })
+    : [];
+  const storeById = new Map(retailers.map((r) => [r.id, r]));
+  const itemsWithStore = order.items.map((i) => ({
+    ...i,
+    storeName: i.retailerId ? storeById.get(i.retailerId)?.businessName ?? null : null,
+  }));
+
   const isOwner = order.userId === user.id;
   const isAdmin = user.role === "ADMIN";
   let isSelling = false;
@@ -29,7 +40,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!isOwner && !isAdmin && !isSelling) {
     return NextResponse.json({ order: null }, { status: 403 });
   }
-  return NextResponse.json({ order });
+  return NextResponse.json({ order: { ...order, items: itemsWithStore } });
 }
 
 // POST /api/orders/[id]/cancel is handled via PATCH here — cancel order (owner while PLACED/CONFIRMED, admin always)

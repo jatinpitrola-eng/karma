@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 type Address = { id: string; name: string; phone: string; pincode: string; line: string; city: string; state: string; isDefault: boolean };
-type CartData = { items: { product: { id: string; name: string; price: number; images: string } }[]; itemsTotal: number; deliveryFee: number } | null;
+type CartData = { items: { product: { id: string; name: string; price: number; images: string; retailer?: { businessName: string } | null } }[]; itemsTotal: number; deliveryFee: number } | null;
 
 function UpiFlow({
   open,
@@ -299,9 +299,16 @@ function CheckoutInner() {
         <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">{t("checkout.orderSummary")}</p>
         <div className="mt-2 space-y-1">
           {cart.items.map((i) => (
-            <div key={i.product.id} className="flex justify-between text-xs">
-              <span className="min-w-0 flex-1 truncate pr-3 text-muted-foreground">{i.product.name}</span>
-              <span className="font-medium">{formatINR(i.product.price)}</span>
+            <div key={i.product.id} className="flex justify-between gap-3 text-xs">
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-foreground">{i.product.name}</span>
+                {i.product.retailer?.businessName && (
+                  <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+                    <span aria-hidden>🛍</span> {i.product.retailer.businessName}
+                  </span>
+                )}
+              </span>
+              <span className="shrink-0 self-center font-medium">{formatINR(i.product.price)}</span>
             </div>
           ))}
         </div>
