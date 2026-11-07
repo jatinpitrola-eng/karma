@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       await notify({
         userId: notifyUserId,
         title: "✅ Your account is approved!",
-        body: `${retailer.businessName} is now live on PartKart. Start adding products in your Seller Hub.`,
+        body: `${retailer.businessName} is now live on KARMA. Start adding products in your Seller Hub.`,
         type: "RETAILER",
         link: "/seller",
       });
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       await notify({
         userId: notifyUserId,
         title: "Account blocked",
-        body: "Your seller account has been blocked by PartKart admin.",
+        body: "Your seller account has been blocked by KARMA admin.",
         type: "RETAILER",
         link: "/seller",
       });

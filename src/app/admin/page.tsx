@@ -134,7 +134,7 @@ export default function AdminPage() {
             )}
           </div>
         </div>
-        <p className="mt-4 text-center text-[11px] text-muted-foreground">PartKart {t("admin.title")}</p>
+        <p className="mt-4 text-center text-[11px] text-muted-foreground">KARMA {t("admin.title")}</p>
       </div>
     );
   }

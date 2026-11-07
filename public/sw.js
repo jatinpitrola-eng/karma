@@ -1,10 +1,10 @@
-/* PartKart Service Worker — v1
+/* KARMA Service Worker — v1
  * - Precache app shell
  * - Network-first for navigations (offline fallback to /offline)
  * - Cache-first for static assets (icons, images, fonts)
  * - NEVER cache /api/*
  */
-const VERSION = 'partkart-v4';
+const VERSION = 'karma-v5';
 const SHELL_CACHE = `${VERSION}-shell`;
 const STATIC_CACHE = `${VERSION}-static`;
 const OFFLINE_URL = '/offline';
@@ -14,8 +14,10 @@ const SHELL_ASSETS = [
   '/offline',
   '/manifest.json',
   '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/icon-512-maskable.png',
+  '/icons/icon-512.webp',
+  '/icons/icon-512-maskable.webp',
+  '/images/karma-medal.png',
+  '/images/karma-medal-192.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -126,7 +128,7 @@ self.addEventListener('fetch', (event) => {
 
 // Web Push handler (notifications sent via registration.showNotification)
 self.addEventListener('push', (event) => {
-  let data = { title: 'PartKart', body: '' };
+  let data = { title: 'KARMA', body: '' };
   try {
     if (event.data) data = { ...data, ...event.data.json() };
   } catch (e) {

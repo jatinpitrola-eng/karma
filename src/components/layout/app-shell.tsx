@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { Zap } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { AppHeader } from "./app-header";
 import { BottomNav } from "./bottom-nav";
@@ -17,17 +16,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto w-full max-w-5xl px-4 py-6">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
             <span className="flex items-center gap-1.5 font-bold text-fk-text">
-              <span className="grid h-6 w-6 place-items-center rounded bg-fk-blue text-white">
-                <Zap className="h-3.5 w-3.5 fill-fk-yellow" />
+              <span className="grid h-6 w-6 place-items-center overflow-hidden rounded-full bg-[#0E2148] ring-1 ring-[#C9A227]/60">
+                <img src="/images/karma-medal-192.png" alt="" className="h-6 w-6 rounded-full object-cover" draggable={false} />
               </span>
-              PartKart
+              KARMA
             </span>
             <Link href="/seller/signup" className="font-semibold text-fk-blue hover:text-fk-blue-dark hover:underline">
               {t("seller.becomeSeller")}
             </Link>
             <Link href="/account" className="text-fk-muted hover:text-fk-blue hover:underline">{t("account.help")}</Link>
             <Link href="/account" className="text-fk-muted hover:text-fk-blue hover:underline">{t("account.about")}</Link>
-            <span className="ml-auto text-fk-muted">© 2026 PartKart — {t("auth.sub")}</span>
+            <span className="ml-auto text-fk-muted">© 2026 KARMA — {t("auth.sub")}</span>
           </div>
         </div>
       </footer>

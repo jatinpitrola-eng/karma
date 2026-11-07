@@ -1,5 +1,5 @@
 /**
- * PartKart seed — ADDITIVE & RE-RUN SAFE (v2 Flipkart catalog)
+ * KARMA seed — ADDITIVE & RE-RUN SAFE (v2 Flipkart catalog)
  * - Every entity is upserted by a stable unique key (slug / key / phone / code)
  * - Second run produces identical row counts, zero duplicates
  * - Products use REAL verified photos (Pexels/Unsplash pool) via images JSON [{url}]
@@ -144,7 +144,7 @@ const RETIRED_PRODUCTS = [
 
 // ---------------- main ----------------
 async function main() {
-  console.log("🌱 Seeding PartKart v2 (Flipkart catalog, additive, upsert by stable keys)…");
+  console.log("🌱 Seeding KARMA v2 (Flipkart catalog, additive, upsert by stable keys)…");
 
   // 0. retire legacy categories & products from v1 catalog
   await db.category.updateMany({ where: { slug: { in: RETIRED_CATEGORIES } }, data: { active: false } });
@@ -166,7 +166,7 @@ async function main() {
 
   // 3. Users
   const usersData = [
-    { phone: "9999999999", name: "PartKart Admin", role: "ADMIN" },
+    { phone: "9999999999", name: "KARMA Admin", role: "ADMIN" },
     { phone: "9000000001", name: "Aarav Shah", role: "CUSTOMER" },
     { phone: "9876543210", name: "Ramesh Patel", role: "RETAILER" },
     { phone: "9876543211", name: "Suresh Kumar", role: "RETAILER" },
@@ -275,8 +275,8 @@ async function main() {
 
   // 8. Welcome notifications (only if the user has none — avoids dupes on re-run)
   const welcome: [string, string, string, string][] = [
-    ["9000000001", "Welcome to PartKart! 🎉", "India's Auto Parts Marketplace. Find parts for your bike & car from verified retailers.", "PROMO"],
-    ["9876543210", "Welcome to PartKart Seller Hub", "Manage your products and orders from the seller portal.", "RETAILER"],
+    ["9000000001", "Welcome to KARMA! 🎉", "India's Auto Parts Marketplace. Find parts for your bike & car from verified retailers.", "PROMO"],
+    ["9876543210", "Welcome to KARMA Seller Hub", "Manage your products and orders from the seller portal.", "RETAILER"],
   ];
   for (const [phone, title, body, type] of welcome) {
     const u = await db.user.findUnique({ where: { phone } });

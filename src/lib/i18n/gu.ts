@@ -244,7 +244,7 @@ export const gu: Dict = {
 
   // auth
   "auth.login": "લોગિન",
-  "auth.welcome": "પાર્ટકાર્ટમાં આપનું સ્વાગત છે",
+  "auth.welcome": "KARMAમાં આપનું સ્વાગત છે",
   "auth.sub": "ભારતનું ઓટો પાર્ટ્સ માર્કેટપ્લેસ",
   "auth.phoneLabel": "તમારો મોબાઇલ નંબર લખો",
   "auth.phonePlaceholder": "10 આંકડાનો મોબાઇલ નંબર",
@@ -258,7 +258,7 @@ export const gu: Dict = {
   "auth.invalidOtp": "ખોટો ઓટીપી. ફરી પ્રયાસ કરો",
   "auth.loginSuccess": "સફળતાપૂર્વક લોગિન થયા",
   "auth.logout": "લોગઆઉટ",
-  "auth.terms": "આગળ વધીને તમે પાર્ટકાર્ટની ઉપયોગ શરતો અને ગોપનીયતા નીતિ સાથે સંમત થાવ છો",
+  "auth.terms": "આગળ વધીને તમે KARMAની ઉપયોગ શરતો અને ગોપનીયતા નીતિ સાથે સંમત થાવ છો",
   "auth.resellerNote": "વેપારી છો? તમે ખાતું ટેબમાંથી સાઇન અપ કરી શકો છો.",
 
   // account
@@ -270,7 +270,7 @@ export const gu: Dict = {
   "account.language": "ભાષા",
   "account.installApp": "એપ ઇન્સ્ટોલ કરો",
   "account.help": "સહાય કેન્દ્ર",
-  "account.about": "પાર્ટકાર્ટ વિશે",
+  "account.about": "KARMA વિશે",
   "account.loggedInAs": "લોગિન સ્થિતિ",
   "account.notLoggedIn": "તમે લોગિન નથી",
   "account.loginNow": "લોગિન / સાઇન અપ",
@@ -319,9 +319,9 @@ export const gu: Dict = {
   "seller.markConfirmed": "પુષ્ટિ કરો",
   "seller.markPacked": "પેક થયો",
   "seller.markShipped": "મોકલ્યો",
-  "seller.blocked": "તમારું ખાતું અવરોધિત કરાયું છે. પાર્ટકાર્ટ સહાયતાથી સંપર્ક કરો.",
+  "seller.blocked": "તમારું ખાતું અવરોધિત કરાયું છે. KARMA સહાયતાથી સંપર્ક કરો.",
   "seller.customerGateTitle": "તમે ગ્રાહક ખાતામાં પ્રવેશ્યા છે",
-  "seller.customerGateBody": "તમારા વેપારી ખાતામાં પ્રવેશ કરો અથવા PartKart પર પ્રોડક્ટ ઉમેરવા માટે વેપારી બનો.",
+  "seller.customerGateBody": "તમારા વેપારી ખાતામાં પ્રવેશ કરો અથવા KARMA પર પ્રોડક્ટ ઉમેરવા માટે વેપારી બનો.",
   "seller.loginAsRetailer": "વેપારી તરીકે લોગિન કરો",
   "seller.pickVehicles": "વાહન પસંદ કરો",
   "seller.selected": "પસંદ થયેલ",
@@ -329,7 +329,7 @@ export const gu: Dict = {
   "seller.disabledBadge": "નિષ્ક્રિય",
 
   // admin
-  "admin.title": "પાર્ટકાર્ટ વહીવટ",
+  "admin.title": "KARMA વહીવટ",
   "admin.loginTitle": "વહીવટકર્તા લોગિન",
   "admin.loginSub": "પ્રતિબંધિત વિસ્તાર. ફક્ત અધિકૃત કર્મચારીઓ માટે.",
   "admin.dashboard": "વહીવટ ડેશબોર્ડ",
@@ -376,10 +376,10 @@ export const gu: Dict = {
 
   // pwa
   "pwa.install": "એપ ઇન્સ્ટોલ કરો",
-  "pwa.installPill": "પાર્ટકાર્ટ એપ ઇન્સ્ટોલ કરો",
+  "pwa.installPill": "KARMA એપ ઇન્સ્ટોલ કરો",
   "pwa.installCta": "ઇન્સ્ટોલ કરો",
-  "pwa.installTitle": "પાર્ટકાર્ટ ઇન્સ્ટોલ કરો",
-  "pwa.installBody": "ઝડપી, એપ જેવો અનુભવ માટે પાર્ટકાર્ટને હોમ સ્ક્રીન પર ઉમેરો.",
+  "pwa.installTitle": "KARMA ઇન્સ્ટોલ કરો",
+  "pwa.installBody": "ઝડપી, એપ જેવો અનુભવ માટે KARMAને હોમ સ્ક્રીન પર ઉમેરો.",
   "pwa.later": "પછી",
   "pwa.iosTitle": "આઈફોન / આઈપેડ પર ઇન્સ્ટોલ કરો",
   "pwa.ios1": "આ સાઇટ સફારીમાં ખોલો",

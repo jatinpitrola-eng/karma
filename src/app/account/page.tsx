@@ -172,7 +172,7 @@ export default function AccountPage() {
       )}
 
       <p className="pb-2 text-center text-[11px] text-muted-foreground">
-        PartKart — {t("auth.sub")} · v1.0.0
+        KARMA — {t("auth.sub")} · v2.0.0
       </p>
     </div>
   );

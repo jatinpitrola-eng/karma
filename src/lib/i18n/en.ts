@@ -244,7 +244,7 @@ export const en = {
 
   // auth
   "auth.login": "Login",
-  "auth.welcome": "Welcome to PartKart",
+  "auth.welcome": "Welcome to KARMA",
   "auth.sub": "India's Auto Parts Marketplace",
   "auth.phoneLabel": "Enter your mobile number",
   "auth.phonePlaceholder": "10-digit mobile number",
@@ -258,7 +258,7 @@ export const en = {
   "auth.invalidOtp": "Incorrect OTP. Try again",
   "auth.loginSuccess": "Logged in successfully",
   "auth.logout": "Logout",
-  "auth.terms": "By continuing, you agree to PartKart's Terms of Use and Privacy Policy",
+  "auth.terms": "By continuing, you agree to KARMA's Terms of Use and Privacy Policy",
   "auth.resellerNote": "Retailer? You can sign up from the Account tab.",
 
   // account
@@ -270,7 +270,7 @@ export const en = {
   "account.language": "Language",
   "account.installApp": "Install App",
   "account.help": "Help Center",
-  "account.about": "About PartKart",
+  "account.about": "About KARMA",
   "account.loggedInAs": "Logged in as",
   "account.notLoggedIn": "You are not logged in",
   "account.loginNow": "Login / Sign Up",
@@ -319,9 +319,9 @@ export const en = {
   "seller.markConfirmed": "Confirm",
   "seller.markPacked": "Mark Packed",
   "seller.markShipped": "Mark Shipped",
-  "seller.blocked": "Your account has been blocked. Contact PartKart support.",
+  "seller.blocked": "Your account has been blocked. Contact KARMA support.",
   "seller.customerGateTitle": "You are logged in as a customer",
-  "seller.customerGateBody": "Log in with your seller account or become a seller to add products on PartKart.",
+  "seller.customerGateBody": "Log in with your seller account or become a seller to add products on KARMA.",
   "seller.loginAsRetailer": "Login as retailer",
   "seller.pickVehicles": "Pick vehicles",
   "seller.selected": "Selected",
@@ -329,7 +329,7 @@ export const en = {
   "seller.disabledBadge": "DISABLED",
 
   // admin
-  "admin.title": "PartKart Admin",
+  "admin.title": "KARMA Admin",
   "admin.loginTitle": "Admin Login",
   "admin.loginSub": "Restricted area. Authorised personnel only.",
   "admin.dashboard": "Admin Dashboard",
@@ -376,10 +376,10 @@ export const en = {
 
   // pwa
   "pwa.install": "Install App",
-  "pwa.installPill": "Install PartKart App",
-  "pwa.installTitle": "Install PartKart",
+  "pwa.installPill": "Install KARMA App",
+  "pwa.installTitle": "Install KARMA",
   "pwa.installCta": "Install",
-  "pwa.installBody": "Add PartKart to your home screen for a faster, app-like experience.",
+  "pwa.installBody": "Add KARMA to your home screen for a faster, app-like experience.",
   "pwa.later": "Later",
   "pwa.iosTitle": "Install on iPhone / iPad",
   "pwa.ios1": "Open this site in Safari",

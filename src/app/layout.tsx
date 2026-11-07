@@ -3,28 +3,29 @@ import { Inter, Noto_Sans_Devanagari, Noto_Sans_Gujarati } from "next/font/googl
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { AppShell } from "@/components/layout/app-shell";
+import { SplashScreen } from "@/components/brand/splash-screen";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const devanagari = Noto_Sans_Devanagari({ subsets: ["devanagari"], variable: "--font-devanagari", display: "swap" });
 const gujarati = Noto_Sans_Gujarati({ subsets: ["gujarati"], variable: "--font-gujarati", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "PartKart — India's Auto Parts Marketplace",
+  title: "KARMA — India's Auto Parts Marketplace",
   description:
     "Buy chains, sprockets, gearbox parts, belts, brakes, clutch plates, filters and oils for your bike & car from verified retailers across India.",
   manifest: "/manifest.json",
-  applicationName: "PartKart",
+  applicationName: "KARMA",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "PartKart",
+    title: "KARMA",
   },
   icons: {
     icon: [
       { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/icon-512.webp", sizes: "512x512", type: "image/webp" },
     ],
-    apple: "/icons/icon-192.png",
+    apple: "/icons/apple-touch-icon.png",
   },
 };
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       >
         <Providers>
           <AppShell>{children}</AppShell>
+          <SplashScreen />
         </Providers>
       </body>
     </html>

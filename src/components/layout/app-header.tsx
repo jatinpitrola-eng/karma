@@ -74,11 +74,16 @@ export function AppHeader() {
       <div className="mx-auto w-full max-w-5xl px-3">
         {/* Row 1 — logo + actions */}
         <div className="flex items-center gap-2.5 pt-2.5 pb-1.5">
-          <Link href="/" className="flex min-w-0 shrink-0 items-baseline gap-1.5" aria-label="PartKart Home">
-            <span className="text-lg font-extrabold italic tracking-tight text-white">PartKart</span>
-            <span className="flex items-center gap-0.5 whitespace-nowrap text-[11px] font-bold text-fk-yellow sm:text-xs">
-              Explore&nbsp;Parts+
-              <Zap className="h-3 w-3 fill-fk-yellow text-fk-yellow" aria-hidden />
+          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2" aria-label="KARMA Home">
+            <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-[#0E2148] ring-1 ring-[#C9A227]/70 shadow-sm">
+              <img src="/images/karma-medal-192.png" alt="" className="h-9 w-9 rounded-full object-cover" draggable={false} />
+            </span>
+            <span className="flex min-w-0 items-baseline gap-1.5">
+              <span className="text-lg font-extrabold italic tracking-tight text-white">KARMA</span>
+              <span className="flex items-center gap-0.5 whitespace-nowrap text-[11px] font-bold text-fk-yellow sm:text-xs">
+                Explore&nbsp;Parts+
+                <Zap className="h-3 w-3 fill-fk-yellow text-fk-yellow" aria-hidden />
+              </span>
             </span>
           </Link>
 

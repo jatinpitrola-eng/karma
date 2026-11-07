@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "PartKart — India's Auto Parts Marketplace",
-  "short_name": "PartKart",
+  "name": "KARMA — India's Auto Parts Marketplace",
+  "short_name": "KARMA",
   "description": "Buy auto & bike parts from verified retailers across India. Chains, sprockets, brakes, clutch, filters and more.",
   "start_url": "/",
   "scope": "/",
@@ -10,7 +10,10 @@
   "background_color": "#F1F3F6",
   "theme_color": "#2874F0",
   "lang": "en",
-  "categories": ["shopping", "automotive"],
+  "categories": [
+    "shopping",
+    "automotive"
+  ],
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -19,15 +22,15 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/icons/icon-512.webp",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512-maskable.png",
+      "src": "/icons/icon-512-maskable.webp",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "maskable"
     }
   ],
@@ -35,17 +38,32 @@
     {
       "name": "Deals",
       "url": "/deals",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "My Orders",
       "url": "/orders",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Cart",
       "url": "/cart",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

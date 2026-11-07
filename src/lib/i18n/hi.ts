@@ -244,7 +244,7 @@ export const hi: Dict = {
 
   // auth
   "auth.login": "लॉगिन",
-  "auth.welcome": "पार्टकार्ट में आपका स्वागत है",
+  "auth.welcome": "KARMA में आपका स्वागत है",
   "auth.sub": "भारत का ऑटो पार्ट्स मार्केटप्लेस",
   "auth.phoneLabel": "अपना मोबाइल नंबर डालें",
   "auth.phonePlaceholder": "10 अंकों का मोबाइल नंबर",
@@ -258,7 +258,7 @@ export const hi: Dict = {
   "auth.invalidOtp": "गलत ओटीपी। फिर प्रयास करें",
   "auth.loginSuccess": "सफलतापूर्वक लॉगिन हो गया",
   "auth.logout": "लॉगआउट",
-  "auth.terms": "आगे बढ़कर आप पार्टकार्ट की उपयोग शर्तों और गोपनीयता नीति से सहमत होते हैं",
+  "auth.terms": "आगे बढ़कर आप KARMA की उपयोग शर्तों और गोपनीयता नीति से सहमत होते हैं",
   "auth.resellerNote": "विक्रेता हैं? आप खाता टैब से साइन अप कर सकते हैं।",
 
   // account
@@ -270,7 +270,7 @@ export const hi: Dict = {
   "account.language": "भाषा",
   "account.installApp": "ऐप इंस्टॉल करें",
   "account.help": "सहायता केंद्र",
-  "account.about": "पार्टकार्ट के बारे में",
+  "account.about": "KARMA के बारे में",
   "account.loggedInAs": "लॉगिन स्थिति",
   "account.notLoggedIn": "आप लॉगिन नहीं हैं",
   "account.loginNow": "लॉगिन / साइन अप",
@@ -319,9 +319,9 @@ export const hi: Dict = {
   "seller.markConfirmed": "पुष्ट करें",
   "seller.markPacked": "पैक किया",
   "seller.markShipped": "भेज दिया",
-  "seller.blocked": "आपका खाता अवरुद्ध कर दिया गया है। पार्टकार्ट सहायता से संपर्क करें।",
+  "seller.blocked": "आपका खाता अवरुद्ध कर दिया गया है। KARMA सहायता से संपर्क करें।",
   "seller.customerGateTitle": "आप ग्राहक खाते से लॉग इन हैं",
-  "seller.customerGateBody": "अपने विक्रेता खाते से लॉग इन करें या PartKart पर प्रोडक्ट जोड़ने के लिए विक्रेता बनें।",
+  "seller.customerGateBody": "अपने विक्रेता खाते से लॉग इन करें या KARMA पर प्रोडक्ट जोड़ने के लिए विक्रेता बनें।",
   "seller.loginAsRetailer": "विक्रेता के रूप में लॉगिन करें",
   "seller.pickVehicles": "वाहन चुनें",
   "seller.selected": "चयनित",
@@ -329,7 +329,7 @@ export const hi: Dict = {
   "seller.disabledBadge": "निष्क्रिय",
 
   // admin
-  "admin.title": "पार्टकार्ट प्रशासन",
+  "admin.title": "KARMA प्रशासन",
   "admin.loginTitle": "प्रशासक लॉगिन",
   "admin.loginSub": "प्रतिबंधित क्षेत्र। केवल अधिकृत कर्मचारियों के लिए।",
   "admin.dashboard": "प्रशासक डैशबोर्ड",
@@ -376,10 +376,10 @@ export const hi: Dict = {
 
   // pwa
   "pwa.install": "ऐप इंस्टॉल करें",
-  "pwa.installPill": "पार्टकार्ट ऐप इंस्टॉल करें",
+  "pwa.installPill": "KARMA ऐप इंस्टॉल करें",
   "pwa.installCta": "इंस्टॉल करें",
-  "pwa.installTitle": "पार्टकार्ट इंस्टॉल करें",
-  "pwa.installBody": "तेज़, ऐप जैसे अनुभव के लिए पार्टकार्ट को होम स्क्रीन पर जोड़ें।",
+  "pwa.installTitle": "KARMA इंस्टॉल करें",
+  "pwa.installBody": "तेज़, ऐप जैसे अनुभव के लिए KARMA को होम स्क्रीन पर जोड़ें।",
   "pwa.later": "बाद में",
   "pwa.iosTitle": "आईफोन / आईपैड पर इंस्टॉल करें",
   "pwa.ios1": "यह साइट सफारी में खोलें",

@@ -125,7 +125,7 @@ export function NotificationEngine({ children }: { children: ReactNode }) {
       if (perm === "granted") {
         const reg = await navigator.serviceWorker?.getRegistration();
         if (reg) {
-          reg.showNotification("PartKart", {
+          reg.showNotification("KARMA", {
             body: t("notif.pushEnabled"),
             icon: "/icons/icon-192.png",
           });

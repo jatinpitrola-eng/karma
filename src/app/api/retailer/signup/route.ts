@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       admins.map((a) => a.id),
       {
         title: "🏪 New seller waiting for approval",
-        body: `${businessName} (${city}) applied to sell on PartKart.`,
+        body: `${businessName} (${city}) applied to sell on KARMA.`,
         type: "ADMIN",
         link: "/admin",
       }

@@ -13,6 +13,6 @@
     <circle r="26" fill="#F1F3F6" stroke="none"/>
     <circle r="26"/>
   </g>
-  <text x="300" y="425" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" fill="#2874F0" text-anchor="middle" opacity="0.75">PartKart</text>
+  <text x="300" y="425" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" fill="#2874F0" text-anchor="middle" opacity="0.75">KARMA</text>
   <text x="300" y="470" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="500" fill="#878787" text-anchor="middle">Explore Parts+</text>
 </svg>
