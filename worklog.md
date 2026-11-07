@@ -131,3 +131,24 @@ Work Log:
 
 Stage Summary:
 - v2.2 deployed on the live preview (same persistent preview URL — workspace :3000 via gateway; dev.log clean). Demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212/9111100002 approved · Customer 9000000001 · OTP 1234 · /admin unlisted). Flipkart theme, retailer-name visibility, notifications, i18n, PWA, seed, tenant isolation all untouched per DO NOT.
+
+---
+Task ID: 6
+Agent: main (Super Z)
+Task: KARMA rebrand v2.0 — PartKart → KARMA (client's medallion logo), app-open splash loader, PWA, GitHub push
+
+Work Log:
+- Brand: ALL "PartKart"/"पार्टकार्ट"/"પાર્ટકાર્ટ" → "KARMA" across src/, public/, prisma/ (metadata, manifest name/short_name, i18n EN/HI/GU 9+9+9 keys, header/footer, offline page, admin title, account version v2.0.0, push-notification titles, API notification bodies, seed admin name + welcome notifications, placeholder.svg, package.json name, sw.js). rg sweep = zero leftovers.
+- Logo assets from client's bronze medallion photo (upload/pasted_image_*.png, 1380×752): scripts/karma-icons.py extracts circle (CX 695, CY 380, R 360) → public/images/karma-medal.png (512 RGBA transparent) + karma-medal-192.png; PWA icons on deep-navy radial gradient + gold ring: icon-192.png, icon-512.webp (52 KB), icon-512-maskable.webp (24 KB), apple-touch-icon.png, src/app/icon.png favicon. Heavy PNG-512s dropped in favor of WebP (6× lighter).
+- Splash loader: src/components/brand/splash-screen.tsx mounted in root layout (outside AppShell → plays on every full app open, never on client-side nav). Navy radial bg + rotating dashed gold rings (7s/4.5s counter-rotating) + glowing medallion + gold-gradient "KARMA" tracking + "ACTION · WORK · DUTY" + shimmer bar; fades at 1.7s, unmounts at 2.2s; body scroll locked while visible; prefers-reduced-motion respected (0.5s static). Keyframes in globals.css (karma-spin/-rev/glow/rise/bar).
+- Header/footer logo chips: medallion in navy circle + gold ring + "KARMA" italic white + yellow "Explore Parts+ ⚡" preserved (Flipkart glass header untouched).
+- PWA: manifest name "KARMA — India's Auto Parts Marketplace" / short "KARMA" / webp icons; sw.js VERSION karma-v5 (purges partkart-v4 caches) + precache list updated (icon-512.webp, maskable.webp, karma-medal images); push title "KARMA". Install pill renders "Install KARMA App".
+- Repo hygiene for GitHub: .gitignore + db/*.db, tool-results, download, upload, mini-services, examples, tests, agent-ctx (untracked 133 artifact files → 164 app files); README.md (features, quick start, demo accounts, structure); .env.example; !.env.example exception.
+- Build: npm run build ✓ 46 routes, zero errors. Seed re-run ✓ (KARMA Admin in DB).
+- E2E (390px+360px): splash plays on open then unmounts ✓; header KARMA+medallion ✓; zero PartKart DOM leftovers ✓; login "Welcome to KARMA" ✓; GU "KARMAમાં આપનું સ્વાગત છે / KARMA વિશે / © 2026 KARMA" 100% pure ✓; install pill "Install KARMA App" ✓; manifest+icons+sw all 200 ✓; v2.2 order address intact (Aarav Shah full card) ✓; seller customer-gate intact ✓; 🛍 store lines intact ✓; no h-scroll 360/390 (/, orders, login, account) ✓; console clean ✓; offline page KARMA ✓.
+- GitHub: token identified (login jatinpitrola-eng) → repo "karma" created (public) → committed "KARMA v2.0 — rebrand…" (2b77641) → pushed main ✓ → token stripped from git remote URL. Secret scan of tree + git history (ghp_/vcp_/sk-) = clean; tokens never committed.
+- Vercel token verified (user jatinpitrola-8071) but NOT deployed: app uses SQLite file DB — non-persistent on serverless (orders/sessions would vanish). Offered migration path (Turso/Neon Postgres) as next step instead of shipping broken.
+
+Stage Summary:
+- App is now KARMA end-to-end (name, medallion logo, splash loader, PWA, trilingual) with zero functional regressions; live preview serving karma-v5 SW + new icon set. Repo: https://github.com/jatinpitrola-eng/karma. Demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212/9111100002 · Customer 9000000001 · OTP 1234).
+- Proof: /home/z/my-project/download/proof6/ (01 splash-medallion, 02 home KARMA header, 03 order-address regression, 04 login Gujarati KARMA).
