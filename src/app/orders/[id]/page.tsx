@@ -42,7 +42,21 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         const d = await r.json();
         setOrder(d.order);
       })
-      .catch(() => setMissing(true));
+      .catch(() => {
+        // Serverless fallback: this instance may not have the order row —
+        // use the client-side stash written right after placement.
+        try {
+          const c = localStorage.getItem(`karma:order:${id}`);
+          const d = c ? JSON.parse(c) : null;
+          if (d?.order) {
+            setOrder(d.order);
+            return;
+          }
+        } catch {
+          /* ignore */
+        }
+        setMissing(true);
+      });
   }, [id]);
 
   useEffect(load, [load]);

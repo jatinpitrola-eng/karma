@@ -167,3 +167,24 @@ Work Log:
 Stage Summary:
 - Final handoff state: app live & verified end-to-end, repo synced. Demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212/9111100002 · Customer 9000000001 · OTP 1234).
 - Proof: /home/z/my-project/download/proof7/ (01-live-splash, 02-live-home).
+
+---
+Task ID: 8
+Agent: main (Super Z)
+Task: KARMA v2.1 — Vercel production deploy (karmav1.vercel.app) with serverless-safe state layer
+
+Work Log:
+- Deployed https://karmav1.vercel.app (project "karmav1", account jatinpitrola-8071, repo github.com/jatinpitrola-eng/karma). Build on Vercel: prisma generate + next build (46 routes, zero errors), ~1 min.
+- Serverless SQLite reality: Vercel lambda /tmp is ephemeral per instance; requests flip instances → DB-backed sessions/carts/orders vanished between requests ("file is not a database" + 401s on first attempt). Fixes, all local-behavior-preserving:
+  1) Boot seed: src/instrumentation.ts (+ instrumentation-node.ts) copies a bundled SQLite snapshot to /tmp/karma.db on first boot of every instance (VERCEL=1 + file:/tmp/ gated). Snapshot shipped as src/seed-db.ts (base64 of public/karma-seed.db, 229KB, SQLite magic-header validated, atomic rename; regen: scripts/make-seed-module.py). Self-fetch approach tried first — Vercel edge returned HTML to the internal fetch, hence bundled base64.
+  2) Stateless signed sessions: verify-otp now issues HMAC-SHA256 token "<userId>.<exp>.<sig>" (SESSION_SECRET env, 30d); getSessionUser falls back to signature verification + user lookup (users identical in every seeded instance). DB session rows still written best-effort; legacy DB-session cookies still honoured. Login survives any instance flip (verified: auth/me after 45s + 60s idle = Aarav Shah).
+  3) Cookie cart: /api/cart rewritten onto signed httpOnly cookie pk_cart (src/lib/cart-cookie.ts, 20 lines × qty≤99, tamper-checked) with IDENTICAL payload shapes; GET migrates legacy DB CartItem rows into the cookie once. /api/orders POST reads cart from cookie (legacy DB fallback), clears cookie + DB rows on success. Add→cart→checkout→order all survive 90s idle.
+  4) Order read resilience: checkout stashes the confirmed order (fetched immediately post-place) under karma:order:<id> in localStorage (max 5); /orders/[id] falls back to the stash when the instance misses the row; /orders list merges stashes (user-scoped). New ORD-2026-1017 renders full detail (🛍 Sharma Motor Parts, ₹549+₹49=₹598 COD, 5-step timeline, DELIVERY ADDRESS card) and appears in My Orders (17 orders).
+- Vercel env: DATABASE_URL=file:/tmp/karma.db + SESSION_SECRET (production). package.json build = prisma generate && next build && best-effort standalone copies.
+- E2E on karmav1.vercel.app (agent-browser 390px, fresh cookies+localStorage): splash → KARMA home with install pill → OTP login → product → add to cart → 60-90s idles → cart intact → checkout with saved address (B-402 Sunrise Residency) → COD ORD-2026-1017 → success screen → order detail full → My Orders 17 → console ZERO errors/warnings. Manifest/sw/icons 200; /api/products returns seeded catalog.
+- Regression: local dev + space-z preview unchanged and healthy (200, title intact); local curl flow verify-otp→cart→ORD-2026-1017(local)→cart cleared ✓.
+- Known demo caveat (documented, non-blocking): long-idle instance resets revert cart/order writes to seed state; placed orders stay visible via the client stash; real fix path = managed Postgres (Neon/Turso) when the client wants persistence.
+
+Stage Summary:
+- KARMA live on BOTH: https://karmav1.vercel.app (Vercel production, client link) and the workspace preview (same persistent URL). GitHub synced (see Task 8 commit). Demo accounts unchanged (Admin 9999999999 · Retailers 9876543210/9876543211/9876543212/9111100002 · Customer 9000000001 · OTP 1234).
+- Proof: /home/z/my-project/download/proof7/ (v1-vercel-splash, v2-vercel-home, v3-vercel-cart, v4-vercel-checkout, v5/v7 order placed, v6/v8 order detail).

@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import crypto from "node:crypto";
 import { db } from "@/lib/db";
 import { cookies } from "next/headers";
 
@@ -11,6 +12,41 @@ export type SessionUser = {
   role: string; // CUSTOMER | RETAILER | ADMIN
 };
 
+const SESSION_TTL_DAYS = 30;
+
+function secret(): string {
+  return process.env.SESSION_SECRET || "karma-demo-secret-v1";
+}
+
+function sign(payload: string): string {
+  return crypto.createHmac("sha256", secret()).update(payload).digest("hex");
+}
+
+// Stateless signed token "<userId>.<expEpochMs>.<hmac>" — survives serverless
+// instance resets (Vercel /tmp is ephemeral; user rows are identical in every
+// seeded instance, so roles still resolve on any instance).
+export function makeSessionToken(userId: string): string {
+  const exp = Date.now() + SESSION_TTL_DAYS * 86_400_000;
+  const payload = `${userId}.${exp}`;
+  return `${payload}.${sign(payload)}`;
+}
+
+function parseSignedToken(token: string): string | null {
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  const [userId, exp, sig] = parts;
+  const payload = `${userId}.${exp}`;
+  const expect = sign(payload);
+  if (sig.length !== expect.length) return null;
+  try {
+    if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expect))) return null;
+  } catch {
+    return null;
+  }
+  if (Number(exp) <= Date.now()) return null;
+  return userId;
+}
+
 export async function getSessionUser(req?: NextRequest): Promise<SessionUser | null> {
   let token: string | undefined | null;
   if (req) {
@@ -20,17 +56,28 @@ export async function getSessionUser(req?: NextRequest): Promise<SessionUser | n
     token = store.get(SESSION_COOKIE)?.value;
   }
   if (!token) return null;
+
+  // 1) Classic DB-backed session (local dev, warm sticky instance)
   const session = await db.session.findUnique({
     where: { token },
     include: { user: true },
   });
-  if (!session) return null;
-  return {
-    id: session.user.id,
-    phone: session.user.phone,
-    name: session.user.name,
-    role: session.user.role,
-  };
+  if (session) {
+    return {
+      id: session.user.id,
+      phone: session.user.phone,
+      name: session.user.name,
+      role: session.user.role,
+    };
+  }
+
+  // 2) Stateless signed token fallback (serverless: /tmp may have been
+  //    reseeded since login — the signed cookie still authenticates)
+  const userId = parseSignedToken(token);
+  if (!userId) return null;
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user) return null;
+  return { id: user.id, phone: user.phone, name: user.name, role: user.role };
 }
 
 export async function requireUser(req?: NextRequest): Promise<SessionUser> {

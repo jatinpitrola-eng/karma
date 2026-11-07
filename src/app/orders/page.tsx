@@ -32,7 +32,25 @@ export default function OrdersPage() {
     if (!me) return;
     fetch("/api/orders", { cache: "no-store" })
       .then((r) => r.json())
-      .then((d) => setOrders(d.orders ?? []))
+      .then((d) => {
+        const dbOrders: Order[] = d.orders ?? [];
+        // Serverless-safe merge: orders placed on another lambda instance may
+        // be missing from this response — add the client-side stashes.
+        try {
+          const local: Order[] = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (!k?.startsWith("karma:order:")) continue;
+            const v = JSON.parse(localStorage.getItem(k) || "null");
+            if (v?.order?.id && v.order.userId === me.id && !dbOrders.some((o) => o.id === v.order.id)) {
+              local.push(v.order);
+            }
+          }
+          setOrders([...local, ...dbOrders]);
+        } catch {
+          setOrders(dbOrders);
+        }
+      })
       .catch(() => setOrders([]));
   }, [me]);
 

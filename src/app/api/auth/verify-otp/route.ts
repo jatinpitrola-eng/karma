@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { SESSION_COOKIE } from "@/lib/session";
+import { SESSION_COOKIE, makeSessionToken } from "@/lib/session";
 
 // POST /api/auth/verify-otp { phone, code }
 // Demo: OTP must be 1234 (also accepted from stored otp records). Creates user if new.
@@ -24,8 +24,14 @@ export async function POST(req: NextRequest) {
       user = await db.user.create({ data: { phone, role: "CUSTOMER" } });
     }
 
-    const token = crypto.randomUUID() + crypto.randomUUID();
-    await db.session.create({ data: { token, userId: user.id } });
+    // Stateless signed token — survives serverless instance resets.
+    // DB session row kept best-effort for local/audit compat.
+    const token = makeSessionToken(user.id);
+    try {
+      await db.session.create({ data: { token, userId: user.id } });
+    } catch {
+      /* instance-local only — signed cookie still authenticates */
+    }
 
     const res = NextResponse.json({
       ok: true,

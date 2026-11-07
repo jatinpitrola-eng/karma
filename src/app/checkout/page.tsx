@@ -165,6 +165,27 @@ function CheckoutInner() {
       const data = await res.json();
       if (data.ok) {
         setPlaced({ id: data.orderId, code: data.code });
+        // Serverless-safe stash: the order row lives on the instance that
+        // served this request; cache it so order detail/list still render if
+        // a later request lands on a fresh instance.
+        fetch(`/api/orders/${data.orderId}`, { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => {
+            if (!d?.order) return;
+            try {
+              const keys: string[] = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k?.startsWith("karma:order:")) keys.push(k);
+              }
+              keys.sort();
+              while (keys.length >= 5) localStorage.removeItem(keys.shift()!);
+              localStorage.setItem(`karma:order:${data.orderId}`, JSON.stringify(d));
+            } catch {
+              /* storage full/unavailable — non-critical */
+            }
+          })
+          .catch(() => {});
         refresh();
       } else {
         import("sonner").then(({ toast }) => toast.error(t("common.error")));

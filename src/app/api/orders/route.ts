@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getSessionUser } from "@/lib/session";
+import { clearCartCookie, parseCart } from "@/lib/cart-cookie";
 import { notify } from "@/lib/notify";
 
 // GET /api/orders — my orders
@@ -44,10 +45,32 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const paymentMethod = body.paymentMethod === "UPI" ? "UPI" : "COD";
 
-    const cartItems = await db.cartItem.findMany({
-      where: { userId: user.id },
-      include: { product: { include: { retailer: true } } },
+    // Cart source: signed cart cookie (serverless-safe). Legacy DB rows are
+    // still honoured if the cookie is absent (seeded demo carts).
+    let lines = parseCart(req);
+    let dbCartRows: { productId: string; qty: number }[] = [];
+    if (lines.length === 0) {
+      const rows = await db.cartItem.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+        select: { productId: true, qty: true },
+      });
+      dbCartRows = rows;
+      lines = rows.map((r) => ({ productId: r.productId, qty: r.qty }));
+    }
+    if (lines.length === 0) {
+      return NextResponse.json({ ok: false, error: "EMPTY_CART" }, { status: 400 });
+    }
+    const products = await db.product.findMany({
+      where: { id: { in: lines.map((l) => l.productId) } },
+      include: { retailer: true },
     });
+    const byId = new Map(products.map((p) => [p.id, p]));
+    const cartItems = lines
+      .map((l) => ({ productId: l.productId, qty: l.qty, product: byId.get(l.productId) }))
+      .filter((x): x is { productId: string; qty: number; product: NonNullable<(typeof products)[number]> } =>
+        Boolean(x.product),
+      );
     if (cartItems.length === 0) {
       return NextResponse.json({ ok: false, error: "EMPTY_CART" }, { status: 400 });
     }
@@ -117,8 +140,12 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Clear cart
-    await db.cartItem.deleteMany({ where: { userId: user.id } });
+    // Clear cart (signed cookie + legacy DB rows)
+    try {
+      await db.cartItem.deleteMany({ where: { userId: user.id } });
+    } catch {
+      /* best-effort */
+    }
 
     // Notify every retailer with products in this order (LIVE new order)
     const retailerUserIds = new Set<string>();
@@ -144,7 +171,9 @@ export async function POST(req: NextRequest) {
       link: `/orders/${order.id}`,
     });
 
-    return NextResponse.json({ ok: true, orderId: order.id, code });
+    const res = NextResponse.json({ ok: true, orderId: order.id, code });
+    clearCartCookie(res);
+    return res;
   } catch (e) {
     console.error(e);
     return NextResponse.json({ ok: false, error: "SERVER" }, { status: 500 });
